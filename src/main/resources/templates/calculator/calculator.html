@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            background: #2c3e50;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 2px solid #34495e;
+        }
+
+        .calculator-title {
+            text-align: center;
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .display {
+            background: #1a252f;
+            border: 2px solid #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: right;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .display-input {
+            background: transparent;
+            border: none;
+            color: #ecf0f1;
+            font-size: 28px;
+            text-align: right;
+            width: 100%;
+            outline: none;
+            font-family: 'Courier New', monospace;
+        }
+
+        .display-result {
+            color: #3498db;
+            font-size: 18px;
+            margin-top: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 300px;
+        }
+
+        .btn {
+            background: #34495e;
+            border: none;
+            border-radius: 10px;
+            color: #ecf0f1;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: #4a6741;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-operator {
+            background: #e74c3c;
+        }
+
+        .btn-operator:hover {
+            background: #c0392b;
+        }
+
+        .btn-equals {
+            background: #27ae60;
+            grid-column: span 2;
+        }
+
+        .btn-equals:hover {
+            background: #229954;
+        }
+
+        .btn-clear {
+            background: #f39c12;
+        }
+
+        .btn-clear:hover {
+            background: #e67e22;
+        }
+
+        .btn-zero {
+            grid-column: span 2;
+        }
+
+        .footer {
+            text-align: center;
+            color: #bdc3c7;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .buttons-grid {
+                gap: 10px;
+            }
+            
+            .btn {
+                padding: 15px;
+                font-size: 18px;
+            }
+            
+            .display-input {
+                font-size: 24px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <a href="/dashboard.html" class="nav-btn">대시보드</a>
+        <a href="/logout" class="nav-btn logout-btn">로그아웃</a>
+    </div>
+    
+    <div class="calculator-container">
+        <h1 class="calculator-title">계산기</h1>
+        
+        <div class="display">
+            <input type="text" class="display-input" id="display" value="0" readonly>
+            <div class="display-result" id="result"></div>
+        </div>
+        
+        <div class="buttons-grid">
+            <button class="btn btn-clear">C</button>
+            <button class="btn btn-clear">⌫</button>
+            <button class="btn btn-operator">÷</button>
+            <button class="btn btn-operator">×</button>
+            
+            <button class="btn">7</button>
+            <button class="btn">8</button>
+            <button class="btn">9</button>
+            <button class="btn btn-operator">-</button>
+            
+            <button class="btn">4</button>
+            <button class="btn">5</button>
+            <button class="btn">6</button>
+            <button class="btn btn-operator">+</button>
+            
+            <button class="btn">1</button>
+            <button class="btn">2</button>
+            <button class="btn">3</button>
+            <button class="btn btn-equals" rowspan="2">=</button>
+            
+            <button class="btn btn-zero">0</button>
+            <button class="btn">.</button>
+        </div>
+        
+        <div class="footer">
+            <p>Java 백엔드 연동 준비 완료</p>
+        </div>
+    </div>
+
+</body>
+</html>
