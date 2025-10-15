@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 로그인, 회원가입 등 인증 관련 기능을 처리
  */
 @Controller
-public class AuthController {
+public class AuthController 
+{
 
     /**
      * 로그인 처리
@@ -18,7 +19,8 @@ public class AuthController {
      * @return 로그인 페이지 템플릿
      */
     @GetMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password) {
+    public String login(@RequestParam String email, @RequestParam String password) 
+    {
         System.out.println("email = " + email);
         System.out.println("password = " + password);
         return "auth/login";

@@ -10,14 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
  * 메인 페이지, 대시보드 등 홈 관련 기능을 처리
  */
 @Controller
-public class HomeController {
+public class HomeController 
+{
 
     /**
      * 메인 홈페이지 표시
      * @return 메인 페이지 템플릿
      */
     @GetMapping("/")
-    public String index() {
+    public String index() 
+    {
         return "index"; // resolves to templates/index.html via Thymeleaf
     }
 
@@ -26,7 +28,8 @@ public class HomeController {
      * @return 메인 페이지 템플릿
      */
     @GetMapping("/index.html")
-    public String indexHtml() {
+    public String indexHtml() 
+    {
         return "index";
     }
 
@@ -35,7 +38,8 @@ public class HomeController {
      * @return 로그인 페이지 템플릿
      */
     @GetMapping("/login.html")
-    public String loginPage() {
+    public String loginPage() 
+    {
         return "auth/login";
     }
 
@@ -46,7 +50,8 @@ public class HomeController {
      * @return 대시보드 페이지 템플릿
      */
     @GetMapping("/dashboard.html")
-    public String dashboard(HttpSession session, Model model) {
+    public String dashboard(HttpSession session, Model model) 
+    {
         // 세션에서 사용자 이름 가져오기
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
@@ -58,7 +63,8 @@ public class HomeController {
      * @return 계산기 페이지 템플릿
      */
     @GetMapping("/calculator.html")
-    public String calculator() {
+    public String calculator() 
+    {
         return "calculator/calculator"; // resolves to templates/calculator/calculator.html
     }
 
@@ -67,7 +73,8 @@ public class HomeController {
      * @return 블로그 페이지 템플릿
      */
     @GetMapping("/blog.html")
-    public String blog() {
+    public String blog() 
+    {
         return "blog/blog"; // resolves to templates/blog/blog.html
     }
 }

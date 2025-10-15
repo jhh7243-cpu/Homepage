@@ -10,10 +10,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 인터셉터를 등록하여 특정 URL 패턴에 대한 접근 제어
  */
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer 
+{
 
     @Override
-    public void addInterceptors(@NonNull InterceptorRegistry registry) {
+    public void addInterceptors(@NonNull InterceptorRegistry registry) 
+    {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .addPathPatterns("/calculator.html", "/blog.html", "/dashboard.html") // 로그인 체크가 필요한 페이지
                 .excludePathPatterns("/", "/index.html", "/login.html", "/login", "/logout", 
