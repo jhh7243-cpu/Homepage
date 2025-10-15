@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,100 +32,107 @@
         .calculator-title {
             text-align: center;
             color: #ecf0f1;
-            margin-bottom: 20px;
-            font-size: 24px;
+            margin-bottom: 30px;
+            font-size: 28px;
             font-weight: bold;
         }
 
-        .display {
-            background: #1a252f;
+        form {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #ecf0f1;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 15px;
             border: 2px solid #34495e;
             border-radius: 10px;
+            font-size: 18px;
+            background: #1a252f;
+            color: #ecf0f1;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ecf0f1' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+        }
+
+        .form-select option {
+            background: #1a252f;
+            color: #ecf0f1;
+            padding: 10px;
+        }
+
+        .result-display {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            text-align: right;
-            min-height: 80px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
-        .display-input {
-            background: transparent;
-            border: none;
-            color: #ecf0f1;
-            font-size: 28px;
-            text-align: right;
-            width: 100%;
-            outline: none;
-            font-family: 'Courier New', monospace;
+        .result-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
-        .display-result {
-            color: #3498db;
-            font-size: 18px;
-            margin-top: 5px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .buttons-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            max-width: 300px;
-        }
-
-        .btn {
-            background: #34495e;
-            border: none;
-            border-radius: 10px;
-            color: #ecf0f1;
-            font-size: 20px;
+        .result-value {
+            color: white;
+            font-size: 32px;
             font-weight: bold;
-            padding: 20px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn-calculate {
+            width: 100%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
         }
 
-        .btn:hover {
-            background: #4a6741;
+        .btn-calculate:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
         }
 
-        .btn:active {
+        .btn-calculate:active {
             transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-operator {
-            background: #e74c3c;
-        }
-
-        .btn-operator:hover {
-            background: #c0392b;
-        }
-
-        .btn-equals {
-            background: #27ae60;
-            grid-column: span 2;
-        }
-
-        .btn-equals:hover {
-            background: #229954;
-        }
-
-        .btn-clear {
-            background: #f39c12;
-        }
-
-        .btn-clear:hover {
-            background: #e67e22;
-        }
-
-        .btn-zero {
-            grid-column: span 2;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
         }
 
         .footer {
@@ -172,21 +179,27 @@
 
         @media (max-width: 480px) {
             .calculator-container {
-                padding: 20px;
+                padding: 25px 20px;
                 margin: 10px;
             }
             
-            .buttons-grid {
-                gap: 10px;
-            }
-            
-            .btn {
-                padding: 15px;
-                font-size: 18px;
-            }
-            
-            .display-input {
+            .calculator-title {
                 font-size: 24px;
+            }
+            
+            .form-input,
+            .form-select {
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .result-value {
+                font-size: 24px;
+            }
+            
+            .btn-calculate {
+                padding: 15px;
+                font-size: 16px;
             }
 
             .nav-buttons {
@@ -204,40 +217,41 @@
     </div>
     
     <div class="calculator-container">
-        <h1 class="calculator-title">계산기</h1>
+        <h1 class="calculator-title">🧮 계산기</h1>
         
-        <div class="display">
-            <input type="text" class="display-input" id="display" value="0" readonly>
-            <div class="display-result" id="result"></div>
-        </div>
-        
-        <div class="buttons-grid">
-            <button class="btn btn-clear">C</button>
-            <button class="btn btn-clear">⌫</button>
-            <button class="btn btn-operator">÷</button>
-            <button class="btn btn-operator">×</button>
+        <form action="/calculator/calculate" method="post">
+            <div class="form-group">
+                <label class="form-label">첫 번째 숫자</label>
+                <input type="number" step="any" name="num1" class="form-input" 
+                       th:value="${num1}" placeholder="숫자를 입력하세요" required>
+            </div>
             
-            <button class="btn">7</button>
-            <button class="btn">8</button>
-            <button class="btn">9</button>
-            <button class="btn btn-operator">-</button>
+            <div class="form-group">
+                <label class="form-label">연산자</label>
+                <select name="operator" class="form-select" required>
+                    <option value="+" th:selected="${operator == '+'}">+ (더하기)</option>
+                    <option value="-" th:selected="${operator == '-'}">- (빼기)</option>
+                    <option value="*" th:selected="${operator == '*'}">× (곱하기)</option>
+                    <option value="/" th:selected="${operator == '/'}">÷ (나누기)</option>
+                </select>
+            </div>
             
-            <button class="btn">4</button>
-            <button class="btn">5</button>
-            <button class="btn">6</button>
-            <button class="btn btn-operator">+</button>
+            <div class="form-group">
+                <label class="form-label">두 번째 숫자</label>
+                <input type="number" step="any" name="num2" class="form-input" 
+                       th:value="${num2}" placeholder="숫자를 입력하세요" required>
+            </div>
             
-            <button class="btn">1</button>
-            <button class="btn">2</button>
-            <button class="btn">3</button>
-            <button class="btn btn-equals" rowspan="2">=</button>
+            <div class="result-display" th:if="${result != null}">
+                <p class="result-label">계산 결과:</p>
+                <p class="result-value" th:text="${num1 + ' ' + operator + ' ' + num2 + ' = ' + result}"></p>
+            </div>
             
-            <button class="btn btn-zero">0</button>
-            <button class="btn">.</button>
-        </div>
+            <button type="submit" class="btn-calculate">계산하기</button>
+        </form>
         
         <div class="footer">
-            <p>Java 백엔드 연동 준비 완료</p>
+            <p>✅ Java 백엔드 연동 완료</p>
         </div>
     </div>
 

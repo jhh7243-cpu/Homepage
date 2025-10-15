@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>계산기 웹사이트</title>
+    <title>GameHub - 게임 포털</title>
     <style>
         * {
             margin: 0;
@@ -13,157 +13,278 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
+            color: #ffffff;
         }
 
+        /* Header */
         .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .main-title {
-            color: white;
-            font-size: 48px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 18px;
-            font-weight: 300;
-        }
-
-        .main-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
             width: 100%;
-            max-width: 600px;
-            text-align: center;
+            z-index: 1000;
+            border-bottom: 2px solid #00d4ff;
         }
 
-        .welcome-message {
-            color: #2c3e50;
-            font-size: 24px;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .description {
-            color: #7f8c8d;
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 40px;
-        }
-
-        .button-container {
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            justify-content: space-between;
             align-items: center;
+            padding: 0 20px;
         }
 
-        .main-button {
-            width: 100%;
-            max-width: 300px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
             color: white;
             border: none;
-            border-radius: 15px;
-            padding: 18px 30px;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 8px;
+            padding: 10px 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .main-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .main-button:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .secondary-button {
-            width: 100%;
-            max-width: 300px;
-            background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
-            border-radius: 15px;
-            padding: 18px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
+            font-size: 14px;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
         }
 
-        .secondary-button:hover {
-            background: #667eea;
-            color: white;
+        .nav-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
         }
 
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 40px 20px;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
+        .hero-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00d4ff 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+        }
+
+        .hero-image {
+            max-width: 600px;
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            margin: 40px auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 60px auto 0 auto;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #00d4ff;
+            text-align: center;
+        }
+
+        .login-button {
+            width: 100%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .login-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Game Categories */
+        .game-categories {
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 60px;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 28px;
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .view-all {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .view-all:hover {
+            color: #00d4ff;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .game-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .game-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .game-description {
+            color: #b0b0b0;
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .game-genre {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .main-title {
+            .hero-title {
                 font-size: 36px;
             }
             
-            .subtitle {
-                font-size: 16px;
-            }
-            
-            .main-container {
+            .login-container {
                 padding: 30px 20px;
-                margin: 10px;
+                margin: 0 20px;
             }
             
-            .welcome-message {
-                font-size: 20px;
+            .game-grid {
+                grid-template-columns: 1fr;
             }
             
-            .description {
-                font-size: 14px;
+            .header-content {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1 class="main-title">계산기 웹사이트</h1>
-        <p class="subtitle">간편하고 정확한 계산을 위한 온라인 도구</p>
-    </div>
-
-    <div class="main-container">
-        <h2 class="welcome-message">환영합니다!</h2>
-        <p class="description">
-            이 웹사이트는 사용자 친화적인 인터페이스로 다양한 계산 기능을 제공합니다.<br>
-            로그인하여 계산기와 블로그를 이용해보세요.
-        </p>
-        
-        <div class="button-container">
-            <a href="login.html" class="main-button">로그인</a>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🎮 GameHub</div>
         </div>
-    </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">게임의 세계로 떠나세요!</h1>
+            <img src="/image/1279331.jpg" alt="게임 월드" class="hero-image">
+            
+            <div class="login-container">
+                <h2 class="login-title">🚀 시작하기</h2>
+                <a href="login.html" class="login-button">로그인</a>
+            </div>
+        </section>
+
+    </main>
 </body>
 </html>

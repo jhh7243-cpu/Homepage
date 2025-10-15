@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameHub - 로그인</title>
+    <title>회원가입</title>
     <style>
         * {
             margin: 0;
@@ -13,46 +13,31 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            color: #ffffff;
         }
 
-        .login-container {
-            background: rgba(255, 255, 255, 0.1);
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             width: 100%;
-            max-width: 450px;
-            position: relative;
-            overflow: hidden;
+            max-width: 400px;
         }
 
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
-            z-index: -1;
-        }
-
-        .login-title {
+        .register-title {
             text-align: center;
-            color: #00d4ff;
+            color: #2c3e50;
             margin-bottom: 30px;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
         }
 
         .form-group {
@@ -61,83 +46,59 @@
 
         .form-label {
             display: block;
-            color: #b0b0b0;
+            color: #34495e;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 14px;
         }
 
         .form-input {
             width: 100%;
             padding: 15px;
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            border-radius: 12px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
+            background: #fff;
             outline: none;
-            backdrop-filter: blur(10px);
         }
 
         .form-input:focus {
-            border-color: #00d4ff;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             transform: translateY(-1px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
         }
 
         .form-input::placeholder {
             color: #a0aec0;
         }
 
-        .login-button {
+        .register-button {
             width: 100%;
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 12px;
-            padding: 18px;
-            font-size: 18px;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
-            position: relative;
-            overflow: hidden;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
-        .login-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .login-button:hover::before {
-            left: 100%;
-        }
-
-        .login-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
-        }
-
-        .login-button:active {
+        .register-button:active {
             transform: translateY(0);
             box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
         }
 
-        .login-button:disabled {
+        .register-button:disabled {
             background: #bdc3c7;
             cursor: not-allowed;
             transform: none;
@@ -152,7 +113,16 @@
             margin-bottom: 20px;
             font-size: 14px;
             border-left: 4px solid #c53030;
-            display: block;
+        }
+
+        .success-message {
+            background: #e6ffed;
+            color: #22863a;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid #22863a;
         }
 
         .back-to-home {
@@ -161,7 +131,7 @@
         }
 
         .back-to-home a {
-            color: #b0b0b0;
+            color: #4a5568;
             text-decoration: none;
             font-size: 14px;
             transition: color 0.3s ease;
@@ -169,37 +139,37 @@
         }
 
         .back-to-home a:hover {
-            color: #00d4ff;
+            color: #667eea;
             text-decoration: underline;
         }
 
-        .register-link {
+        .login-link {
             text-align: center;
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px solid #e0e6ed;
         }
 
-        .register-link a {
-            color: #00d4ff;
+        .login-link a {
+            color: #667eea;
             text-decoration: none;
             font-size: 14px;
             transition: color 0.3s ease;
             font-weight: 600;
         }
 
-        .register-link a:hover {
-            color: #ff6b6b;
+        .login-link a:hover {
+            color: #764ba2;
             text-decoration: underline;
         }
 
         @media (max-width: 480px) {
-            .login-container {
+            .register-container {
                 padding: 30px 20px;
                 margin: 10px;
             }
             
-            .login-title {
+            .register-title {
                 font-size: 24px;
             }
             
@@ -208,7 +178,7 @@
                 font-size: 14px;
             }
             
-            .login-button {
+            .register-button {
                 padding: 12px;
                 font-size: 14px;
             }
@@ -216,12 +186,27 @@
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1 class="login-title">🎮 GameHub 로그인</h1>
+    <div class="register-container">
+        <h1 class="register-title">📝 회원가입</h1>
         
         <div class="error-message" th:if="${error}" th:text="${error}"></div>
+        <div class="success-message" th:if="${success}" th:text="${success}"></div>
         
-        <form action="/login" method="post">
+        <form action="/register" method="post">
+            <div class="form-group">
+                <label class="form-label" for="username">사용자명</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-input" 
+                    placeholder="사용자명을 입력하세요"
+                    required
+                    minlength="2"
+                    maxlength="50"
+                >
+            </div>
+            
             <div class="form-group">
                 <label class="form-label" for="email">이메일</label>
                 <input 
@@ -230,7 +215,6 @@
                     name="email" 
                     class="form-input" 
                     placeholder="example@email.com"
-                    value="admin@site.com"
                     required
                 >
             </div>
@@ -242,14 +226,14 @@
                     id="password" 
                     name="password" 
                     class="form-input" 
-                    placeholder="비밀번호를 입력하세요"
-                    value="1234"
+                    placeholder="비밀번호를 입력하세요 (최소 4자)"
                     required
+                    minlength="4"
                 >
             </div>
             
-            <button type="submit" class="login-button">
-                로그인
+            <button type="submit" class="register-button">
+                가입하기
             </button>
         </form>
         
@@ -257,10 +241,11 @@
             <a href="/">홈으로 돌아가기</a>
         </div>
         
-        <div class="register-link">
-            <a href="/register.html">회원가입</a>
+        <div class="login-link">
+            이미 계정이 있으신가요? <a href="/login.html">로그인</a>
         </div>
     </div>
 
 </body>
 </html>
+

@@ -1,11 +1,20 @@
-HELP.md
-.gradle
+# Gradle
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### STS ###
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
 .apt_generated
 .classpath
 .factorypath
@@ -17,21 +26,63 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+# VS Code
 .vscode/
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+*.log
+
+# User files (개인 파일들 제외)
+../../../../../.bash_history
+../../../../../.cache/
+../../../../../.cursor/
+../../../../../.gitconfig
+../../../../../AppData/
+../../../../../Contacts/
+../../../../../Downloads/
+../../../../../Favorites/
+../../../../../Links/
+../../../../../Music/
+../../../../../Saved Games/
+../../../../../Searches/
+../../../../../Videos/
+../../../../../Zomboid/
+../../../../../curseforge/
+../../../../../*.log
+../../../../../*.ini
+../../../../../NTUSER.DAT*
+
+# 시스템 파일
+../../../../../Documents/
+../../../../../Application Data/
+../../../../../Cookies/
+../../../../../Local Settings/
+../../../../../My Documents/
+../../../../../NetHood/
+../../../../../PrintHood/
+../../../../../Recent/
+../../../../../SendTo/
+../../../../../Templates/
+../../../../../시작 메뉴/
+
+# 프로젝트 루트의 불필요한 파일들
+Calculator.java
+Calculator.class
+Helloworld.java
+index.html

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - 공지사항</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 2px solid #00d4ff;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #ee5a24 0%, #c0392b 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00d4ff 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .page-subtitle {
+            font-size: 20px;
+            color: #b0b0b0;
+        }
+
+        /* Notice List */
+        .notice-list {
+            display: grid;
+            gap: 25px;
+        }
+
+        .notice-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notice-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(255, 107, 107, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .notice-item:hover::before {
+            opacity: 1;
+        }
+
+        .notice-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .notice-item.important {
+            border-left: 5px solid #ff6b6b;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(238, 90, 36, 0.1) 100%);
+        }
+
+        .notice-item.update {
+            border-left: 5px solid #00d4ff;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 153, 204, 0.1) 100%);
+        }
+
+        .notice-item.event {
+            border-left: 5px solid #f093fb;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
+        }
+
+        .notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .notice-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .notice-badge {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+
+        .notice-item.important .notice-badge {
+            background: rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        .notice-item.update .notice-badge {
+            background: rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+        }
+
+        .notice-item.event .notice-badge {
+            background: rgba(240, 147, 251, 0.3);
+            color: #f093fb;
+        }
+
+        .notice-meta {
+            color: #b0b0b0;
+            font-size: 14px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .notice-excerpt {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .read-more {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .read-more:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 36px;
+            }
+            
+            .notice-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .notice-badge {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🎮 GameHub</div>
+            <div class="nav-buttons">
+                <a href="/dashboard.html" class="nav-btn">대시보드</a>
+                <a href="/logout" class="nav-btn logout-btn">로그아웃</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">📢 공지사항</h1>
+                <p class="page-subtitle">GameHub의 최신 소식과 업데이트를 확인하세요</p>
+            </div>
+
+            <!-- Notice List -->
+            <div class="notice-list">
+                <div class="notice-item important">
+                    <div class="notice-header">
+                        <h2 class="notice-title">🚨 중요 공지: 시스템 점검 안내</h2>
+                        <span class="notice-badge">중요</span>
+                    </div>
+                    <div class="notice-meta">관리자 | 2024-01-20 | 조회수: 2,847</div>
+                    <div class="notice-excerpt">
+                        2024년 1월 25일 오전 2시부터 6시까지 시스템 점검이 진행됩니다. 
+                        점검 시간 동안 서비스 이용이 제한될 수 있으니 양해 부탁드립니다.
+                    </div>
+                    <a href="#" class="read-more">자세히 보기</a>
+                </div>
+
+                <div class="notice-item update">
+                    <div class="notice-header">
+                        <h2 class="notice-title">✨ GameHub v2.0 업데이트 완료</h2>
+                        <span class="notice-badge">업데이트</span>
+                    </div>
+                    <div class="notice-meta">관리자 | 2024-01-18 | 조회수: 1,923</div>
+                    <div class="notice-excerpt">
+                        새로운 UI/UX 디자인과 계산기 성능 개선이 적용되었습니다. 
+                        더욱 빠르고 정확한 계산 서비스를 경험해보세요.
+                    </div>
+                    <a href="#" class="read-more">자세히 보기</a>
+                </div>
+
+                <div class="notice-item event">
+                    <div class="notice-header">
+                        <h2 class="notice-title">🎉 신규 사용자 환영 이벤트</h2>
+                        <span class="notice-badge">이벤트</span>
+                    </div>
+                    <div class="notice-meta">관리자 | 2024-01-15 | 조회수: 3,156</div>
+                    <div class="notice-excerpt">
+                        GameHub에 새로 가입하신 모든 사용자분들께 특별한 혜택을 제공합니다. 
+                        지금 바로 참여하세요!
+                    </div>
+                    <a href="#" class="read-more">자세히 보기</a>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-header">
+                        <h2 class="notice-title">📱 모바일 앱 출시 예정</h2>
+                        <span class="notice-badge">소식</span>
+                    </div>
+                    <div class="notice-meta">관리자 | 2024-01-12 | 조회수: 1,456</div>
+                    <div class="notice-excerpt">
+                        GameHub 모바일 앱이 곧 출시됩니다. 언제 어디서나 편리하게 
+                        계산기와 공지사항을 이용하실 수 있습니다.
+                    </div>
+                    <a href="#" class="read-more">자세히 보기</a>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-header">
+                        <h2 class="notice-title">🔧 계산기 기능 개선 사항</h2>
+                        <span class="notice-badge">개선</span>
+                    </div>
+                    <div class="notice-meta">관리자 | 2024-01-10 | 조회수: 987</div>
+                    <div class="notice-excerpt">
+                        계산기 성능이 대폭 개선되었습니다. 더욱 정확하고 빠른 계산 결과를 
+                        제공하며, 새로운 수학 함수들이 추가되었습니다.
+                    </div>
+                    <a href="#" class="read-more">자세히 보기</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
