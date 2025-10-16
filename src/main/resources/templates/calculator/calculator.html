@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,13 +89,82 @@
             padding: 10px;
         }
 
+        .operator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .operator-buttons input[type="radio"] {
+            display: none;
+        }
+
+        .operator-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #34495e;
+            color: #ecf0f1;
+            border: 2px solid #34495e;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 60px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .operator-btn:hover {
+            background: #3498db;
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .operator-buttons input[type="radio"]:checked+.operator-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-color: #e74c3c;
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            transform: translateY(-2px);
+        }
+
         .result-display {
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .result-display.success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .result-display.error {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
         }
 
         .result-label {
@@ -109,6 +179,13 @@
             font-size: 32px;
             font-weight: bold;
             font-family: 'Courier New', monospace;
+        }
+
+        .result-note {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            margin-top: 8px;
+            font-style: italic;
         }
 
         .btn-calculate {
@@ -182,21 +259,21 @@
                 padding: 25px 20px;
                 margin: 10px;
             }
-            
+
             .calculator-title {
                 font-size: 24px;
             }
-            
+
             .form-input,
             .form-select {
                 padding: 12px;
                 font-size: 16px;
             }
-            
+
             .result-value {
                 font-size: 24px;
             }
-            
+
             .btn-calculate {
                 padding: 15px;
                 font-size: 16px;
@@ -207,53 +284,83 @@
                 top: 10px;
                 right: 10px;
             }
+
+            .operator-buttons {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .operator-btn {
+                padding: 12px;
+                font-size: 20px;
+                min-height: 50px;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="nav-buttons">
         <a href="/dashboard.html" class="nav-btn">대시보드</a>
         <a href="/logout" class="nav-btn logout-btn">로그아웃</a>
     </div>
-    
+
     <div class="calculator-container">
         <h1 class="calculator-title">🧮 계산기</h1>
-        
+
         <form action="/calculator/calculate" method="post">
             <div class="form-group">
                 <label class="form-label">첫 번째 숫자</label>
-                <input type="number" step="any" name="num1" class="form-input" 
-                       th:value="${num1}" placeholder="숫자를 입력하세요" required>
+                <input type="number" step="any" name="num1" class="form-input" th:value="${num1}"
+                    placeholder="숫자를 입력하세요" required>
             </div>
-            
+
             <div class="form-group">
                 <label class="form-label">연산자</label>
-                <select name="operator" class="form-select" required>
-                    <option value="+" th:selected="${operator == '+'}">+ (더하기)</option>
-                    <option value="-" th:selected="${operator == '-'}">- (빼기)</option>
-                    <option value="*" th:selected="${operator == '*'}">× (곱하기)</option>
-                    <option value="/" th:selected="${operator == '/'}">÷ (나누기)</option>
-                </select>
+                <div class="operator-buttons">
+                    <input type="radio" name="operator" value="+" id="add" th:checked="${operator == '+'}" required>
+                    <label for="add" class="operator-btn">+</label>
+
+                    <input type="radio" name="operator" value="-" id="subtract" th:checked="${operator == '-'}"
+                        required>
+                    <label for="subtract" class="operator-btn">−</label>
+
+                    <input type="radio" name="operator" value="*" id="multiply" th:checked="${operator == '*'}"
+                        required>
+                    <label for="multiply" class="operator-btn">×</label>
+
+                    <input type="radio" name="operator" value="/" id="divide" th:checked="${operator == '/'}" required>
+                    <label for="divide" class="operator-btn">÷</label>
+                </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="form-label">두 번째 숫자</label>
-                <input type="number" step="any" name="num2" class="form-input" 
-                       th:value="${num2}" placeholder="숫자를 입력하세요" required>
+                <input type="number" step="any" name="num2" class="form-input" th:value="${num2}"
+                    placeholder="숫자를 입력하세요" required>
             </div>
-            
-            <div class="result-display" th:if="${result != null}">
-                <p class="result-label">계산 결과:</p>
+
+            <!-- 성공 결과 표시 -->
+            <div class="result-display success" th:if="${result != null and success == true}">
+                <p class="result-label">✅ 계산 결과:</p>
                 <p class="result-value" th:text="${num1 + ' ' + operator + ' ' + num2 + ' = ' + result}"></p>
+                <p class="result-note">계산이 완료되었습니다!</p>
             </div>
-            
+
+            <!-- 에러 메시지 표시 -->
+            <div class="result-display error" th:if="${error != null}">
+                <p class="result-label">❌ 오류:</p>
+                <p class="result-value" th:text="${error}"></p>
+            </div>
+
             <button type="submit" class="btn-calculate">계산하기</button>
         </form>
-        
+
         <div class="footer">
             <p>✅ Java 백엔드 연동 완료</p>
         </div>
     </div>
 
 </body>
+
 </html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테트리스 게임</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .game-board {
+            flex: 1;
+        }
+
+        .game-info {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .score-board {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .score-board h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .score-item:last-child {
+            border-bottom: none;
+        }
+
+        .score-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .score-value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .next-piece {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .next-piece h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .controls {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .controls h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .control-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .control-item {
+            margin: 10px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .game-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-title h1 {
+            color: #333;
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-title p {
+            color: #666;
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: #333;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .tetris-board {
+            border-collapse: collapse;
+            margin: 0 auto;
+            border: 3px solid #333;
+            background: #000;
+        }
+
+        .tetris-board td {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #333;
+            background: #000;
+        }
+
+        .tetris-board .current-piece {
+            border: 2px solid #fff;
+        }
+
+        .tetris-board .fixed-piece {
+            border: 1px solid #999;
+        }
+
+        .next-piece table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        .next-piece td {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .next-piece .piece-cell {
+            border: 1px solid #333;
+        }
+
+        .next-piece .empty-cell {
+            background: #f0f0f0;
+        }
+
+        .game-status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .game-status.game-over {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .game-status.paused {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .game-status.playing {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            .game-info {
+                width: 100%;
+            }
+            
+            .game-title h1 {
+                font-size: 2em;
+            }
+
+            .control-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/minigame" class="back-button">← 미니게임으로 돌아가기</a>
+    
+    <div class="game-container">
+        <div class="game-board">
+            <div class="game-title">
+                <h1>🧩 테트리스</h1>
+                <p>블록을 맞춰서 라인을 완성하세요!</p>
+            </div>
+            
+            <!-- 게임 상태 표시 -->
+            <div th:if="${game.gameOver}" class="game-status game-over">
+                🎮 게임 오버! 최종 점수: <span th:text="${game.score}">0</span>
+            </div>
+            <div th:if="${!game.gameStarted and !game.gameOver}" class="game-status paused">
+                ⏸️ 게임이 일시정지되었습니다
+            </div>
+            <div th:if="${game.gameStarted and !game.gameOver}" class="game-status playing">
+                ▶️ 게임 진행 중
+            </div>
+            
+            <!-- 테트리스 보드 (Java로 생성된 HTML) -->
+            <div th:utext="${boardHtml}" id="gameBoard" 
+                 oncontextmenu="handleRightClick(event); return false;"
+                 onclick="handleLeftClick(event)"></div>
+        </div>
+        
+        <div class="game-info">
+            <div class="score-board">
+                <h3>📊 점수</h3>
+                <div class="score-item">
+                    <span class="score-label">점수:</span>
+                    <span class="score-value" th:text="${game.score}">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">레벨:</span>
+                    <span class="score-value" th:text="${game.level}">1</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">라인:</span>
+                    <span class="score-value" th:text="${game.lines}">0</span>
+                </div>
+            </div>
+            
+            <div class="next-piece">
+                <h3>🔮 다음 블록</h3>
+                <div th:utext="${nextPieceHtml}"></div>
+            </div>
+            
+            <div class="controls">
+                <h3>🎮 조작</h3>
+                <div class="control-buttons">
+                    <form method="post" action="/minigame/tetris/move" style="display: inline;">
+                        <input type="hidden" name="direction" value="left">
+                        <button type="submit" class="control-btn">← 좌</button>
+                    </form>
+                    <form method="post" action="/minigame/tetris/move" style="display: inline;">
+                        <input type="hidden" name="direction" value="right">
+                        <button type="submit" class="control-btn">우 →</button>
+                    </form>
+                    <form method="post" action="/minigame/tetris/move" style="display: inline;">
+                        <input type="hidden" name="direction" value="down">
+                        <button type="submit" class="control-btn">↓ 하</button>
+                    </form>
+                    <form method="post" action="/minigame/tetris/rotate" style="display: inline;">
+                        <button type="submit" class="control-btn">↻ 회전</button>
+                    </form>
+                    <form method="post" action="/minigame/tetris/drop" style="display: inline;">
+                        <button type="submit" class="control-btn">⬇️ 낙하</button>
+                    </form>
+                    <form method="post" action="/minigame/tetris/pause" style="display: inline;">
+                        <button type="submit" class="control-btn" th:text="${game.gameStarted ? '⏸️ 일시정지' : '▶️ 재개'}">일시정지</button>
+                    </form>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px;">
+                    <form method="post" action="/minigame/tetris/restart" style="display: inline;">
+                        <button type="submit" class="control-btn" style="background: #dc3545;">🔄 재시작</button>
+                    </form>
+                    <form method="post" action="/minigame/tetris/new" style="display: inline;">
+                        <button type="submit" class="control-btn" style="background: #28a745;">🆕 새 게임</button>
+                    </form>
+                </div>
+                
+                <div class="control-item" style="margin-top: 15px; font-size: 12px; color: #999;">
+                    💡 <strong>키보드 조작:</strong><br>
+                    • ← →: 좌우 이동<br>
+                    • ↓: 아래 이동<br>
+                    • ↑: 오른쪽 회전<br>
+                    • 스페이스바: 즉시 낙하<br>
+                    • Z: 왼쪽 회전, X: 오른쪽 회전<br>
+                    • 마우스 클릭도 가능!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 키보드 이벤트 처리
+         */
+        document.addEventListener('keydown', function(event) {
+            event.preventDefault();
+            
+            switch(event.code) {
+                case 'ArrowLeft':
+                    sendKeyboardAction('left');
+                    break;
+                case 'ArrowRight':
+                    sendKeyboardAction('right');
+                    break;
+                case 'ArrowDown':
+                    sendKeyboardAction('down');
+                    break;
+                case 'ArrowUp':
+                    sendKeyboardAction('up');
+                    break;
+                case 'Space':
+                    sendKeyboardAction('space');
+                    break;
+                case 'KeyZ':
+                    sendKeyboardAction('rotateLeft');
+                    break;
+                case 'KeyX':
+                    sendKeyboardAction('rotateRight');
+                    break;
+            }
+        });
+        
+        /**
+         * 마우스 좌클릭 처리 (즉시 낙하)
+         */
+        function handleLeftClick(event) {
+            event.preventDefault();
+            sendClickAction('drop');
+        }
+        
+        /**
+         * 마우스 우클릭 처리 (블록 회전)
+         */
+        function handleRightClick(event) {
+            event.preventDefault();
+            sendClickAction('rotate');
+        }
+        
+        /**
+         * 키보드 액션을 서버로 전송
+         */
+        function sendKeyboardAction(action) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/minigame/tetris/keyboard';
+            
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = action;
+            
+            form.appendChild(actionInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+        
+        /**
+         * 클릭 액션을 서버로 전송
+         */
+        function sendClickAction(action) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/minigame/tetris/click';
+            
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = action;
+            
+            form.appendChild(actionInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+        
+        /**
+         * 자동 새로고침 (게임 상태 업데이트)
+         */
+        function autoRefresh() {
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000); // 1초마다 새로고침
+        }
+        
+        // 페이지 로드 시 자동 새로고침 시작
+        window.onload = function() {
+            autoRefresh();
+        };
+    </script>
+</body>
+</html>

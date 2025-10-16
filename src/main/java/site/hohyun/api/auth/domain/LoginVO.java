@@ -2,9 +2,9 @@ package site.hohyun.api.auth.domain;
 
 public class LoginVO 
 {
-    private String email = "a";
+    private String email = "a@a.com";
     private String password = "1234";
-    
+
     // Getter
     public String getEmail() 
     {
@@ -15,6 +15,4 @@ public class LoginVO
     {
         return password;
     }
-
-
 }

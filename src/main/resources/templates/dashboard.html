@@ -246,6 +246,16 @@
             color: #4facfe;
         }
 
+        .game-card.minigame {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 87, 34, 0.2) 100%);
+            border-color: rgba(255, 193, 7, 0.3);
+        }
+
+        .game-card.minigame .game-genre {
+            background: rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .dashboard-title {
@@ -305,6 +315,22 @@
                             <div class="game-name">계산기</div>
                             <div class="game-description">정확하고 빠른 계산을 위한 고성능 계산기 도구입니다. 사칙연산부터 복잡한 수학 계산까지 지원합니다.</div>
                             <div class="game-genre">유틸리티</div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mini Games Section -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <h2 class="category-title">🎮 미니게임</h2>
+                        <a href="/minigame" class="view-all">전체보기 →</a>
+                    </div>
+                    <div class="game-grid">
+                        <a href="/minigame" class="game-card minigame">
+                            <div class="game-icon">🎯</div>
+                            <div class="game-name">미니게임 모음</div>
+                            <div class="game-description">다양한 재미있는 미니게임들을 즐겨보세요! 간단한 퍼즐부터 아케이드 게임까지 다양한 장르의 게임이 준비되어 있습니다.</div>
+                            <div class="game-genre">게임</div>
                         </a>
                     </div>
                 </div>
