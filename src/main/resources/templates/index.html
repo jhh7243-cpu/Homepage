@@ -13,21 +13,22 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
             min-height: 100vh;
-            color: #ffffff;
+            color: #212529;
         }
 
         /* Header */
         .header {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             padding: 15px 0;
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            border-bottom: 2px solid #00d4ff;
+            border-bottom: 2px solid #007bff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
@@ -42,8 +43,8 @@
         .logo {
             font-size: 28px;
             font-weight: bold;
-            color: #00d4ff;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            color: #007bff;
+            text-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
         }
 
         .nav-buttons {
@@ -52,7 +53,7 @@
         }
 
         .nav-btn {
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -62,11 +63,12 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
         }
 
         .nav-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
         }
 
         /* Main Content */
@@ -90,16 +92,16 @@
             font-size: 48px;
             font-weight: bold;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #00d4ff 0%, #ff6b6b 100%);
+            background: linear-gradient(135deg, #007bff 0%, #dc3545 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            text-shadow: 0 0 30px rgba(0, 123, 255, 0.2);
         }
 
         .hero-subtitle {
             font-size: 20px;
-            color: #b0b0b0;
+            color: #6c757d;
             margin-bottom: 40px;
         }
 
@@ -114,26 +116,26 @@
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             border-radius: 20px;
             padding: 40px;
             max-width: 500px;
             margin: 60px auto 0 auto;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 123, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
         .login-title {
             font-size: 32px;
             margin-bottom: 30px;
-            color: #00d4ff;
+            color: #007bff;
             text-align: center;
         }
 
         .login-button {
             width: 100%;
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -145,12 +147,12 @@
             text-decoration: none;
             display: inline-block;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
         }
 
         .login-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
         }
 
         /* Game Categories */
@@ -173,7 +175,7 @@
 
         .category-title {
             font-size: 28px;
-            color: #00d4ff;
+            color: #007bff;
             font-weight: bold;
         }
 
@@ -195,21 +197,22 @@
         }
 
         .game-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 25px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(0, 123, 255, 0.2);
             transition: all 0.3s ease;
             cursor: pointer;
             text-decoration: none;
-            color: white;
+            color: #212529;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .game-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);
-            border-color: #00d4ff;
+            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.2);
+            border-color: #007bff;
         }
 
         .game-icon {
@@ -226,15 +229,15 @@
         }
 
         .game-description {
-            color: #b0b0b0;
+            color: #6c757d;
             font-size: 14px;
             text-align: center;
             line-height: 1.5;
         }
 
         .game-genre {
-            background: rgba(0, 212, 255, 0.2);
-            color: #00d4ff;
+            background: rgba(0, 123, 255, 0.2);
+            color: #007bff;
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
@@ -276,8 +279,7 @@
     <main class="main-content">
         <!-- Hero Section -->
         <section class="hero-section">
-            <h1 class="hero-title">게임의 세계로 떠나세요!</h1>
-            <img src="/image/1279331.jpg" alt="게임 월드" class="hero-image">
+            <h1 class="hero-title">저의 집에 오신것을 환영합니다</h1>
             
             <div class="login-container">
                 <h2 class="login-title">🚀 시작하기</h2>

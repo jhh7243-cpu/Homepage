@@ -1,65 +1,264 @@
 package site.hohyun.api.news.service;
 
 import org.springframework.stereotype.Service;
-import site.hohyun.api.news.domain.NoticeDTO;
+import site.hohyun.api.news.domain.NewsDTO;
+import site.hohyun.api.news.domain.NewsEntity;
+import site.hohyun.api.news.domain.NewsVO;
+import site.hohyun.api.news.repository.NewsRepository;
+import site.hohyun.api.common.domain.Messenger;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 공지사항 서비스
- * 공지사항 비즈니스 로직 처리
+ * 비즈니스 로직을 담당하는 서비스 계층
  */
 @Service
 public class NewsService 
 {
+    private final NewsRepository newsRepository;
+
+    public NewsService(NewsRepository newsRepository) 
+    {
+        this.newsRepository = newsRepository;
+    }
+
+    /**
+     * 모든 공지사항 조회 (getAllNotices는 기존 컨트롤러와 호환성을 위해 유지)
+     */
+    public List<NewsVO> getAllNotices() 
+    {
+        System.out.println("공지사항 서비스: 모든 공지사항 조회");
+        return newsRepository.findAll().stream()
+                .map(NewsVO::new)
+                .collect(Collectors.toList());
+    }
+
     /**
      * 모든 공지사항 조회
-     * @return 공지사항 목록
      */
-    public List<NoticeDTO> getAllNotices()
+    public List<NewsVO> getAllNews() 
     {
-        System.out.println("공지사항 서비스로 들어옴 - 전체 목록 조회");
-        
-        List<NoticeDTO> notices = new ArrayList<>();
-        
-        // 샘플 공지사항 데이터
-        notices.add(new NoticeDTO(1L, "🚨 중요 공지: 시스템 점검 안내", "중요", 
-            "2024년 1월 25일 오전 2시부터 6시까지 시스템 점검이 진행됩니다.", 
-            "관리자", "2024-01-20", 2847));
-            
-        notices.add(new NoticeDTO(2L, "✨ GameHub v2.0 업데이트 완료", "업데이트", 
-            "새로운 UI/UX 디자인과 계산기 성능 개선이 적용되었습니다.", 
-            "관리자", "2024-01-18", 1923));
-            
-        notices.add(new NoticeDTO(3L, "🎉 신규 사용자 환영 이벤트", "이벤트", 
-            "GameHub에 새로 가입하신 모든 사용자분들께 특별한 혜택을 제공합니다.", 
-            "관리자", "2024-01-15", 3156));
-            
-        notices.add(new NoticeDTO(4L, "📱 모바일 앱 출시 예정", "소식", 
-            "GameHub 모바일 앱이 곧 출시됩니다. 언제 어디서나 편리하게 이용하실 수 있습니다.", 
-            "관리자", "2024-01-12", 1456));
-            
-        notices.add(new NoticeDTO(5L, "🔧 계산기 기능 개선 사항", "개선", 
-            "계산기 성능이 대폭 개선되었습니다. 더욱 정확하고 빠른 계산 결과를 제공합니다.", 
-            "관리자", "2024-01-10", 987));
-        
-        System.out.println("공지사항 " + notices.size() + "개 조회 완료");
-        return notices;
+        System.out.println("공지사항 서비스: 모든 공지사항 조회");
+        return newsRepository.findAll().stream()
+                .map(NewsVO::new)
+                .collect(Collectors.toList());
     }
 
     /**
      * ID로 공지사항 조회
-     * @param id 공지사항 ID
-     * @return 공지사항 정보
      */
-    public NoticeDTO getNoticeById(Long id)
+    public Optional<NewsVO> getNoticeById(Long id) 
     {
-        System.out.println("공지사항 서비스로 들어옴 - ID로 조회: " + id);
+        System.out.println("공지사항 서비스: ID로 공지사항 조회 - " + id);
+        return newsRepository.findById(id)
+                .map(NewsVO::new);
+    }
+
+    /**
+     * 공지사항 생성
+     */
+    public Messenger createNews(NewsDTO newsDTO) 
+    {
+        System.out.println("공지사항 서비스: 공지사항 생성 - " + newsDTO.getTitle());
         
-        // 실제로는 데이터베이스에서 조회
-        // 여기서는 샘플 데이터 반환
-        return new NoticeDTO(id, "샘플 공지사항", "일반", 
-            "이것은 샘플 공지사항입니다.", "관리자", "2024-01-01", 100);
+        Messenger messenger = new Messenger();
+        
+        try 
+        {
+            // 유효성 검사
+            if (newsDTO.getTitle() == null || newsDTO.getTitle().trim().isEmpty()) 
+            {
+                messenger.setCode(1);
+                messenger.setMessage("제목을 입력해주세요.");
+                return messenger;
+            }
+            
+            if (newsDTO.getContent() == null || newsDTO.getContent().trim().isEmpty()) 
+            {
+                messenger.setCode(2);
+                messenger.setMessage("내용을 입력해주세요.");
+                return messenger;
+            }
+            
+            if (newsDTO.getAuthor() == null || newsDTO.getAuthor().trim().isEmpty()) 
+            {
+                messenger.setCode(3);
+                messenger.setMessage("작성자를 입력해주세요.");
+                return messenger;
+            }
+
+            // DTO를 Entity로 변환하여 저장
+            NewsEntity entity = newsDTO.toEntity();
+            NewsEntity savedEntity = newsRepository.save(entity);
+            
+            messenger.setCode(0);
+            messenger.setMessage("공지사항이 성공적으로 작성되었습니다. (ID: " + savedEntity.getId() + ")");
+            
+        } 
+        catch (Exception e) 
+        {
+            System.err.println("공지사항 생성 오류: " + e.getMessage());
+            messenger.setCode(999);
+            messenger.setMessage("공지사항 작성 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        
+        return messenger;
+    }
+
+    /**
+     * 공지사항 수정
+     */
+    public Messenger updateNews(Long id, NewsDTO newsDTO) 
+    {
+        System.out.println("공지사항 서비스: 공지사항 수정 - ID: " + id);
+        
+        Messenger messenger = new Messenger();
+        
+        try 
+        {
+            Optional<NewsEntity> existingNews = newsRepository.findById(id);
+            
+            if (existingNews.isEmpty()) 
+            {
+                messenger.setCode(404);
+                messenger.setMessage("해당 공지사항을 찾을 수 없습니다.");
+                return messenger;
+            }
+            
+            // 유효성 검사
+            if (newsDTO.getTitle() == null || newsDTO.getTitle().trim().isEmpty()) 
+            {
+                messenger.setCode(1);
+                messenger.setMessage("제목을 입력해주세요.");
+                return messenger;
+            }
+            
+            if (newsDTO.getContent() == null || newsDTO.getContent().trim().isEmpty()) 
+            {
+                messenger.setCode(2);
+                messenger.setMessage("내용을 입력해주세요.");
+                return messenger;
+            }
+
+            // 기존 공지사항 정보 유지하면서 수정
+            NewsEntity entity = existingNews.get();
+            entity.setTitle(newsDTO.getTitle());
+            entity.setContent(newsDTO.getContent());
+            entity.setCategory(newsDTO.getCategory());
+            entity.setIsImportant(newsDTO.getIsImportant());
+            
+            newsRepository.save(entity);
+            
+            messenger.setCode(0);
+            messenger.setMessage("공지사항이 성공적으로 수정되었습니다.");
+            
+        } 
+        catch (Exception e) 
+        {
+            System.err.println("공지사항 수정 오류: " + e.getMessage());
+            messenger.setCode(999);
+            messenger.setMessage("공지사항 수정 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        
+        return messenger;
+    }
+
+    /**
+     * 공지사항 삭제
+     */
+    public Messenger deleteNews(Long id) 
+    {
+        System.out.println("공지사항 서비스: 공지사항 삭제 - ID: " + id);
+        
+        Messenger messenger = new Messenger();
+        
+        try 
+        {
+            boolean deleted = newsRepository.deleteById(id);
+            
+            if (deleted) 
+            {
+                messenger.setCode(0);
+                messenger.setMessage("공지사항이 성공적으로 삭제되었습니다.");
+            } 
+            else 
+            {
+                messenger.setCode(404);
+                messenger.setMessage("해당 공지사항을 찾을 수 없습니다.");
+            }
+            
+        } 
+        catch (Exception e) 
+        {
+            System.err.println("공지사항 삭제 오류: " + e.getMessage());
+            messenger.setCode(999);
+            messenger.setMessage("공지사항 삭제 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        
+        return messenger;
+    }
+
+    /**
+     * 조회수 증가
+     */
+    public void incrementViewCount(Long id) 
+    {
+        System.out.println("공지사항 서비스: 조회수 증가 - ID: " + id);
+        newsRepository.incrementViewCount(id);
+    }
+
+    /**
+     * 중요 공지사항 조회
+     */
+    public List<NewsVO> getImportantNotices() 
+    {
+        System.out.println("공지사항 서비스: 중요 공지사항 조회");
+        return newsRepository.findImportantNotices().stream()
+                .map(NewsVO::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 카테고리별 공지사항 조회
+     */
+    public List<NewsVO> getNewsByCategory(String category) 
+    {
+        System.out.println("공지사항 서비스: 카테고리별 공지사항 조회 - " + category);
+        return newsRepository.findByCategory(category).stream()
+                .map(NewsVO::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 제목으로 공지사항 검색
+     */
+    public List<NewsVO> searchNewsByTitle(String keyword) 
+    {
+        System.out.println("공지사항 서비스: 제목으로 공지사항 검색 - " + keyword);
+        return newsRepository.findByTitleContaining(keyword).stream()
+                .map(NewsVO::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 최신 공지사항 조회
+     */
+    public List<NewsVO> getLatestNews(int limit) 
+    {
+        System.out.println("공지사항 서비스: 최신 공지사항 조회 - " + limit + "개");
+        return newsRepository.findLatest(limit).stream()
+                .map(NewsVO::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 공지사항 수 조회
+     */
+    public long getNewsCount() 
+    {
+        return newsRepository.count();
     }
 }

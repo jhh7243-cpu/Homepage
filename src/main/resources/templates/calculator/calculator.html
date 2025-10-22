@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,202 +23,152 @@
         }
 
         .calculator-container {
-            background: #2c3e50;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 2px solid #34495e;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dee2e6;
+            max-width: 400px;
+            width: 100%;
         }
 
         .calculator-title {
             text-align: center;
-            color: #ecf0f1;
+            color: #212529;
             margin-bottom: 30px;
             font-size: 28px;
             font-weight: bold;
         }
 
-        form {
-            width: 100%;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            color: #ecf0f1;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .form-input,
-        .form-select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #34495e;
-            border-radius: 10px;
-            font-size: 18px;
-            background: #1a252f;
-            color: #ecf0f1;
-            outline: none;
-            transition: all 0.3s ease;
-            font-family: 'Courier New', monospace;
-        }
-
-        .form-input:focus,
-        .form-select:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-
-        .form-select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ecf0f1' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            padding-right: 40px;
-        }
-
-        .form-select option {
-            background: #1a252f;
-            color: #ecf0f1;
-            padding: 10px;
-        }
-
-        .operator-buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .operator-buttons input[type="radio"] {
-            display: none;
-        }
-
-        .operator-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #34495e;
-            color: #ecf0f1;
-            border: 2px solid #34495e;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-height: 60px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .operator-btn:hover {
-            background: #3498db;
-            border-color: #3498db;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-        }
-
-        .operator-buttons input[type="radio"]:checked+.operator-btn {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            border-color: #e74c3c;
-            color: white;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .result-display {
+        /* 계산기 디스플레이 */
+        .display {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
+            text-align: right;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .result-display.success {
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-        }
-
-        .result-display.error {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-            animation: shake 0.5s ease-in-out;
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            75% {
-                transform: translateX(5px);
-            }
-        }
-
-        .result-label {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .result-value {
-            color: white;
+        .display-text {
             font-size: 32px;
             font-weight: bold;
+            color: #212529;
             font-family: 'Courier New', monospace;
+            word-break: break-all;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
 
-        .result-note {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 12px;
-            margin-top: 8px;
-            font-style: italic;
+        .display-expression {
+            font-size: 16px;
+            color: #6c757d;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 5px;
+            min-height: 20px;
         }
 
-        .btn-calculate {
-            width: 100%;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            border: none;
+        /* 계산기 버튼 그리드 */
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .calc-btn {
+            background: #ffffff;
+            border: 2px solid #dee2e6;
             border-radius: 12px;
-            padding: 18px;
-            font-size: 18px;
+            padding: 20px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            transition: all 0.2s ease;
+            color: #212529;
+            font-family: 'Segoe UI', sans-serif;
+            height: 70px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-calculate:hover {
+        .calc-btn:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .btn-calculate:active {
+        .calc-btn:active {
             transform: translateY(0);
-            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .footer {
-            text-align: center;
-            color: #bdc3c7;
-            margin-top: 20px;
-            font-size: 14px;
+        /* 연산자 버튼 */
+        .operator {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            border-color: #007bff;
+            color: white;
         }
 
+        .operator:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            border-color: #0056b3;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+        }
+
+        /* 등호 버튼 */
+        .equals {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            border-color: #28a745;
+            color: white;
+        }
+
+        .equals:hover {
+            background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+            border-color: #1e7e34;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        /* 클리어 버튼 */
+        .clear {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .clear:hover {
+            background: linear-gradient(135deg, #c82333 0%, #a93226 100%);
+            border-color: #c82333;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        /* 백스페이스 버튼 */
+        .backspace {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .backspace:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+            border-color: #5a6268;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+        }
+
+        /* 모든 버튼이 동일한 크기 */
+        .zero {
+            grid-column: span 1;
+        }
+
+        /* 네비게이션 버튼 */
         .nav-buttons {
             position: absolute;
             top: 20px;
@@ -228,7 +178,7 @@
         }
 
         .nav-btn {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -241,22 +191,30 @@
         }
 
         .nav-btn:hover {
-            background: #5568d3;
+            background: linear-gradient(135deg, #5568d3 0%, #6a4c93 100%);
             transform: translateY(-2px);
         }
 
         .logout-btn {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
         }
 
         .logout-btn:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
         }
 
+        .footer {
+            text-align: center;
+            color: #6c757d;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+
+        /* 반응형 */
         @media (max-width: 480px) {
             .calculator-container {
-                padding: 25px 20px;
+                padding: 20px;
                 margin: 10px;
             }
 
@@ -264,19 +222,14 @@
                 font-size: 24px;
             }
 
-            .form-input,
-            .form-select {
-                padding: 12px;
-                font-size: 16px;
-            }
-
-            .result-value {
+            .display-text {
                 font-size: 24px;
             }
 
-            .btn-calculate {
+            .calc-btn {
                 padding: 15px;
-                font-size: 16px;
+                font-size: 18px;
+                min-height: 50px;
             }
 
             .nav-buttons {
@@ -284,83 +237,167 @@
                 top: 10px;
                 right: 10px;
             }
-
-            .operator-buttons {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-
-            .operator-btn {
-                padding: 12px;
-                font-size: 20px;
-                min-height: 50px;
-            }
         }
     </style>
 </head>
 
 <body>
     <div class="nav-buttons">
-        <a href="/dashboard.html" class="nav-btn">대시보드</a>
+        <a href="/dashboard" class="nav-btn">대시보드</a>
         <a href="/logout" class="nav-btn logout-btn">로그아웃</a>
     </div>
 
     <div class="calculator-container">
         <h1 class="calculator-title">🧮 계산기</h1>
 
-        <form action="/calculator/calculate" method="post">
-            <div class="form-group">
-                <label class="form-label">첫 번째 숫자</label>
-                <input type="number" step="any" name="num1" class="form-input" th:value="${num1}"
-                    placeholder="숫자를 입력하세요" required>
-            </div>
+        <!-- 계산기 디스플레이 -->
+        <div class="display">
+            <div class="display-expression" th:text="${expression != null ? expression : '0'}">0</div>
+            <div class="display-text" th:text="${currentInput != null ? currentInput : '0'}">0</div>
+        </div>
 
-            <div class="form-group">
-                <label class="form-label">연산자</label>
-                <div class="operator-buttons">
-                    <input type="radio" name="operator" value="+" id="add" th:checked="${operator == '+'}" required>
-                    <label for="add" class="operator-btn">+</label>
 
-                    <input type="radio" name="operator" value="-" id="subtract" th:checked="${operator == '-'}"
-                        required>
-                    <label for="subtract" class="operator-btn">−</label>
+        <!-- 계산기 버튼 -->
+        <div class="calculator-buttons">
+            <!-- 첫 번째 행 -->
+            <form action="/calculator/clear" method="post" style="display: inline;">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn clear">C</button>
+            </form>
+            
+            <form action="/calculator/backspace" method="post" style="display: inline;">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn backspace">⌫</button>
+            </form>
+            
+            <form action="/calculator/operator" method="post" style="display: inline;">
+                <input type="hidden" name="operator" value="/">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn operator">/</button>
+            </form>
+            
+            <form action="/calculator/operator" method="post" style="display: inline;">
+                <input type="hidden" name="operator" value="*">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn operator">×</button>
+            </form>
 
-                    <input type="radio" name="operator" value="*" id="multiply" th:checked="${operator == '*'}"
-                        required>
-                    <label for="multiply" class="operator-btn">×</label>
+            <!-- 두 번째 행 -->
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="7">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">7</button>
+            </form>
+            
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="8">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">8</button>
+            </form>
+            
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="9">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">9</button>
+            </form>
+            
+            <form action="/calculator/operator" method="post" style="display: inline;">
+                <input type="hidden" name="operator" value="-">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn operator">-</button>
+            </form>
 
-                    <input type="radio" name="operator" value="/" id="divide" th:checked="${operator == '/'}" required>
-                    <label for="divide" class="operator-btn">÷</label>
-                </div>
-            </div>
+            <!-- 세 번째 행 -->
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="4">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">4</button>
+            </form>
+            
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="5">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">5</button>
+            </form>
+            
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="6">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">6</button>
+            </form>
+            
+            <form action="/calculator/operator" method="post" style="display: inline;">
+                <input type="hidden" name="operator" value="+">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn operator">+</button>
+            </form>
 
-            <div class="form-group">
-                <label class="form-label">두 번째 숫자</label>
-                <input type="number" step="any" name="num2" class="form-input" th:value="${num2}"
-                    placeholder="숫자를 입력하세요" required>
-            </div>
+            <!-- 네 번째 행 -->
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="1">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">1</button>
+            </form>
+            
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="2">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">2</button>
+            </form>
+            
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="3">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">3</button>
+            </form>
+            
+            <form action="/calculator/operator" method="post" style="display: inline;">
+                <input type="hidden" name="operator" value="%">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn operator">%</button>
+            </form>
 
-            <!-- 성공 결과 표시 -->
-            <div class="result-display success" th:if="${result != null and success == true}">
-                <p class="result-label">✅ 계산 결과:</p>
-                <p class="result-value" th:text="${num1 + ' ' + operator + ' ' + num2 + ' = ' + result}"></p>
-                <p class="result-note">계산이 완료되었습니다!</p>
-            </div>
-
-            <!-- 에러 메시지 표시 -->
-            <div class="result-display error" th:if="${error != null}">
-                <p class="result-label">❌ 오류:</p>
-                <p class="result-value" th:text="${error}"></p>
-            </div>
-
-            <button type="submit" class="btn-calculate">계산하기</button>
-        </form>
+            <!-- 다섯 번째 행 -->
+            <form action="/calculator/number" method="post" style="display: inline;">
+                <input type="hidden" name="number" value="0">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">0</button>
+            </form>
+            
+            <form action="/calculator/decimal" method="post" style="display: inline;">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn">.</button>
+            </form>
+            
+            <form action="/calculator/calculate-advanced" method="post" style="display: inline;">
+                <input type="hidden" name="currentInput" th:value="${currentInput}">
+                <input type="hidden" name="expression" th:value="${expression}">
+                <button type="submit" class="calc-btn equals">=</button>
+            </form>
+        </div>
 
         <div class="footer">
             <p>✅ Java 백엔드 연동 완료</p>
         </div>
     </div>
-
 </body>
 
 </html>

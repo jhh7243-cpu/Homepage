@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - 게시판</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+            min-height: 100vh;
+            color: #212529;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 2px solid #007bff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+            text-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .username {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 20px;
+        }
+
+        .board-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .board-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .board-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #007bff 0%, #dc3545 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 123, 255, 0.2);
+        }
+
+        .board-subtitle {
+            font-size: 20px;
+            color: #6c757d;
+        }
+
+        /* Board Controls */
+        .board-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 12px 16px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            outline: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            width: 250px;
+        }
+
+        .search-input:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-btn, .write-btn {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .search-btn:hover, .write-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Board Table */
+        .board-table-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent;
+        }
+
+        .board-table th {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(255, 107, 107, 0.2) 100%);
+            color: #00d4ff;
+            padding: 20px 15px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+            font-size: 16px;
+        }
+
+        .board-table td {
+            padding: 18px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .board-table tbody tr:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: scale(1.01);
+        }
+
+        .board-table tbody tr:hover td {
+            color: #00d4ff;
+        }
+
+        .post-title {
+            text-align: left;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .post-title:hover {
+            color: #00d4ff;
+            text-decoration: underline;
+        }
+
+        .post-author {
+            color: #b0b0b0;
+        }
+
+        .post-date {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .post-views {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .category-badge {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+            gap: 10px;
+        }
+
+        .page-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border-color: #00d4ff;
+            transform: translateY(-1px);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #b0b0b0;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .board-title {
+                font-size: 36px;
+            }
+            
+            .board-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                justify-content: center;
+            }
+            
+            .search-input {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .board-table-container {
+                padding: 20px 15px;
+                overflow-x: auto;
+            }
+            
+            .board-table {
+                min-width: 600px;
+            }
+            
+            .board-table th,
+            .board-table td {
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 10px;
+            }
+            
+            .board-title {
+                font-size: 28px;
+            }
+            
+            .board-table th,
+            .board-table td {
+                padding: 10px 6px;
+                font-size: 12px;
+            }
+            
+            .pagination {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/dashboard" class="logo">🎮 GameHub</a>
+            <div class="user-info">
+                <div>
+                    안녕하세요, <span class="username" th:text="${username != null ? username : '사용자'}">사용자</span>님!
+                </div>
+                <a href="/dashboard" class="back-btn">대시보드로</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="board-container">
+            <!-- Board Header -->
+            <div class="board-header">
+                <h1 class="board-title">💬 게시판</h1>
+                <p class="board-subtitle">자유롭게 소통하고 정보를 공유하세요</p>
+            </div>
+
+            <!-- Board Controls -->
+            <div class="board-controls">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="제목, 내용, 작성자로 검색..." id="searchInput">
+                    <button class="search-btn" onclick="searchPosts()">🔍 검색</button>
+                </div>
+                <a href="#" class="write-btn" onclick="writePost()">✏️ 글쓰기</a>
+            </div>
+
+            <!-- Board Table -->
+            <div class="board-table-container">
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">번호</th>
+                            <th style="width: 100px;">카테고리</th>
+                            <th>제목</th>
+                            <th style="width: 120px;">작성자</th>
+                            <th style="width: 120px;">작성일</th>
+                            <th style="width: 80px;">조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody id="boardTableBody">
+                        <!-- Sample Data -->
+                        <tr>
+                            <td>10</td>
+                            <td><span class="category-badge">공지</span></td>
+                            <td><a href="#" class="post-title">🎮 GameHub 오픈 기념 이벤트 안내</a></td>
+                            <td><span class="post-author">관리자</span></td>
+                            <td><span class="post-date">2024.01.15</span></td>
+                            <td><span class="post-views">156</span></td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td><span class="category-badge">정보</span></td>
+                            <td><a href="#" class="post-title">새로운 미니게임 업데이트 소식</a></td>
+                            <td><span class="post-author">개발자</span></td>
+                            <td><span class="post-date">2024.01.14</span></td>
+                            <td><span class="post-views">89</span></td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td><span class="category-badge">후기</span></td>
+                            <td><a href="#" class="post-title">테트리스 게임 플레이 후기 - 정말 재밌어요!</a></td>
+                            <td><span class="post-author">게이머123</span></td>
+                            <td><span class="post-date">2024.01.13</span></td>
+                            <td><span class="post-views">67</span></td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td><span class="category-badge">질문</span></td>
+                            <td><a href="#" class="post-title">계산기 기능에 대해 문의드립니다</a></td>
+                            <td><span class="post-author">질문왕</span></td>
+                            <td><span class="post-date">2024.01.12</span></td>
+                            <td><span class="post-views">34</span></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td><span class="category-badge">자유</span></td>
+                            <td><a href="#" class="post-title">게임 추천 좀 해주세요!</a></td>
+                            <td><span class="post-author">게임러버</span></td>
+                            <td><span class="post-date">2024.01.11</span></td>
+                            <td><span class="post-views">45</span></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><span class="category-badge">후기</span></td>
+                            <td><a href="#" class="post-title">GameHub 첫 이용 후기</a></td>
+                            <td><span class="post-author">신규회원</span></td>
+                            <td><span class="post-date">2024.01.10</span></td>
+                            <td><span class="post-views">78</span></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><span class="category-badge">정보</span></td>
+                            <td><a href="#" class="post-title">계산기 사용법 가이드</a></td>
+                            <td><span class="post-author">도움닫이</span></td>
+                            <td><span class="post-date">2024.01.09</span></td>
+                            <td><span class="post-views">92</span></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><span class="category-badge">자유</span></td>
+                            <td><a href="#" class="post-title">오늘의 게임 추천</a></td>
+                            <td><span class="post-author">게임마스터</span></td>
+                            <td><span class="post-date">2024.01.08</span></td>
+                            <td><span class="post-views">56</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><span class="category-badge">질문</span></td>
+                            <td><a href="#" class="post-title">회원가입은 어떻게 하나요?</a></td>
+                            <td><span class="post-author">궁금이</span></td>
+                            <td><span class="post-date">2024.01.07</span></td>
+                            <td><span class="post-views">23</span></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><span class="category-badge">공지</span></td>
+                            <td><a href="#" class="post-title">🎉 GameHub에 오신 것을 환영합니다!</a></td>
+                            <td><span class="post-author">관리자</span></td>
+                            <td><span class="post-date">2024.01.06</span></td>
+                            <td><span class="post-views">234</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn" disabled>‹ 이전</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">4</button>
+                <button class="page-btn">5</button>
+                <button class="page-btn">다음 ›</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 검색 기능
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            if (searchTerm) {
+                alert(`"${searchTerm}" 검색 기능은 추후 구현될 예정입니다.`);
+            } else {
+                alert('검색어를 입력해주세요.');
+            }
+        }
+
+        // 글쓰기 기능
+        function writePost() {
+            alert('글쓰기 기능은 추후 구현될 예정입니다.');
+        }
+
+        // Enter 키로 검색
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPosts();
+            }
+        });
+
+        // 페이지네이션 클릭 이벤트
+        document.querySelectorAll('.page-btn').forEach(btn => {
+            if (!btn.disabled) {
+                btn.addEventListener('click', function() {
+                    // 활성 페이지 스타일 변경
+                    document.querySelector('.page-btn.active').classList.remove('active');
+                    this.classList.add('active');
+                    
+                    // 실제 구현에서는 여기서 페이지 로드 로직을 구현
+                    console.log('페이지 변경:', this.textContent);
+                });
+            }
+        });
+
+        // 게시글 클릭 이벤트
+        document.querySelectorAll('.post-title').forEach(title => {
+            title.addEventListener('click', function(e) {
+                e.preventDefault();
+                const postTitle = this.textContent;
+                alert(`"${postTitle}" 게시글 상세보기 기능은 추후 구현될 예정입니다.`);
+            });
+        });
+    </script>
+</body>
+</html>

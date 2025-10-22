@@ -43,20 +43,6 @@ public class HomeController
         return "auth/login";
     }
 
-    /**
-     * 대시보드 페이지 표시 (로그인 후 메뉴 선택 페이지)
-     * @param session HTTP 세션
-     * @param model 뷰에 데이터 전달을 위한 모델
-     * @return 대시보드 페이지 템플릿
-     */
-    @GetMapping("/dashboard.html")
-    public String dashboard(HttpSession session, Model model) 
-    {
-        // 세션에서 사용자 이름 가져오기
-        String username = (String) session.getAttribute("username");
-        model.addAttribute("username", username);
-        return "dashboard"; // resolves to templates/dashboard.html
-    }
     
     /**
      * 계산기 페이지 표시
