@@ -9,41 +9,21 @@ import lombok.Getter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserVO {
-    private String userId;
-    private String name;
-    private String email;
-    private String phone;
+public class UserVO 
+{
+    // 타이타닉 승객 필드 (CSV 헤더 기반)
+    private String userId;        // PassengerId (승객 ID)
+    private String username;      // Name (승객 이름)
+    private String password;      // Sex (성별)
+    private String name;          // Age (나이)
+    private String email;         // Survived (생존여부)
+    private String phone;         // Ticket (티켓번호
+    private String pclass;        // Pclass (승객 등급)
+    private String sibSp;         // SibSp (형제자매/배우자 수)
+    private String parch;         // Parch (부모/자녀 수)
+    private String fare;          // Fare (요금)
+    private String cabin;         // Cabin (객실 번호)
+    private String embarked;      // Embarked (탑승 항구)
 
-
-    public String getUserId() 
-    {
-        return userId;
-    }
-
-    public String getName() 
-    {
-        return name;
-    }
-
-    public String getEmail() 
-    {
-        return email;
-    }
-
-    public String getPhone() 
-    {
-        return phone;
-    }
-
-    @Override
-    public String toString() 
-    {
-        return "UserVO{" +
-                "userId='" + userId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
-    }
+    
 }

@@ -250,6 +250,11 @@
     <div class="calculator-container">
         <h1 class="calculator-title">🧮 계산기</h1>
 
+        <!-- 에러 메시지 -->
+        <div class="error-message" th:if="${error}" style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+            <strong th:text="${error}">에러 메시지</strong>
+        </div>
+
         <!-- 계산기 디스플레이 -->
         <div class="display">
             <div class="display-expression" th:text="${expression != null ? expression : '0'}">0</div>

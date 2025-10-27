@@ -1,19 +1,15 @@
 package site.hohyun.api.calculator.domain;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-/**
- * 계산 데이터 전송 객체
- * 계산기 입력 데이터를 전달하기 위한 DTO
- */
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CalculationDTO 
+public class CalculatorEntity 
 {
     private int num1;
     private int num2;
-    private String operator;
+    private int operator;   
 }

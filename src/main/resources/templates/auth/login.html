@@ -256,11 +256,6 @@
         <div class="register-link">
             <a href="/user/register">회원가입</a>
         </div>
-
-        <div th:if="${messenger != null}" th:object="${messenger}">
-            <p>code: <span th:text="*{code}">CODE</span></p>
-            <p>message: <span th:text="*{message}">MESSAGE</span></p>
-        </div>
           
     </div>
 

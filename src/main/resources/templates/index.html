@@ -51,6 +51,12 @@
             display: flex;
             gap: 15px;
         }
+        
+        .titanic-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
 
         .nav-btn {
             background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
@@ -69,6 +75,25 @@
         .nav-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+        }
+        
+        .titanic-btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(30, 60, 114, 0.2);
+        }
+        
+        .titanic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.4);
         }
 
         /* Main Content */
@@ -284,6 +309,12 @@
             <div class="login-container">
                 <h2 class="login-title">🚀 시작하기</h2>
                 <a href="login.html" class="login-button">로그인</a>
+                
+                <div class="titanic-buttons">
+                    <a href="/users" class="titanic-btn">🚢 타이타닉 승객 목록</a>
+                    <a href="/weather" class="titanic-btn">🌤️ 날씨 정보</a>
+                    <a href="/products" class="titanic-btn">🛍️ 상품 관리 시스템</a>
+                </div>
             </div>
         </section>
 

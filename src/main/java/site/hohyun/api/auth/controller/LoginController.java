@@ -73,7 +73,7 @@ public class LoginController
                     testUser.setName("Test User");
                     
                     // 사용자 저장
-                    userService.registerUser(testUser);
+                    userService.save(testUser);
                     System.out.println("테스트 사용자 생성 완료!");
                     user = testUser;
                 }
