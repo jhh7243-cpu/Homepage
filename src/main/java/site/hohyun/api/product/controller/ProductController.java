@@ -57,7 +57,7 @@ public class ProductController
     /**
      * 상품 등록 페이지 - GET (브라우저 접근용)
      */
-    @GetMapping("")
+    @GetMapping("/save")
     public String savePage(Model model) 
     {
         model.addAttribute("productDTO", new ProductDTO());
@@ -83,7 +83,7 @@ public class ProductController
         return "product/save";
     }
 
-    @PostMapping("")
+    @PostMapping("/bulk")
     public String saveAll(List<ProductDTO> products, Model model) 
     {
         Messenger message = productService.saveAll(products);
@@ -94,7 +94,7 @@ public class ProductController
     /**
      * 상품 수정 페이지 - GET (브라우저 접근용)
      */
-    @GetMapping("/Id/{id}")
+    @GetMapping("/update/{id}")
     public String updatePage(@PathVariable("id") String id, Model model) 
     {
         try {

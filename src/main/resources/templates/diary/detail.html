@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일기 상세 보기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .diary-detail {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .diary-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+
+        .diary-title::before {
+            content: "📖";
+            margin-right: 15px;
+        }
+
+        .diary-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            font-size: 1.1em;
+            color: #718096;
+        }
+
+        .diary-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .diary-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            color: #4a5568;
+            line-height: 2;
+            white-space: pre-wrap;
+            font-size: 1.1em;
+            min-height: 300px;
+            border: 2px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-right: 10px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            color: white;
+            margin-right: 10px;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .diary-detail {
+                padding: 20px;
+            }
+
+            .diary-title {
+                font-size: 1.5em;
+            }
+
+            .diary-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📖 일기 상세 보기</h1>
+        </div>
+        
+        <div class="content">
+            <div th:if="${error}" th:text="${error}" class="alert alert-error"></div>
+            
+            <div th:if="${diary}" class="diary-detail">
+                <div class="diary-title" th:text="${diary.title}">제목</div>
+                <div class="diary-meta">
+                    <span>📅 <span th:text="${diary.year}"></span>년 
+                    <span th:text="${diary.month}"></span>월 
+                    <span th:text="${diary.day}"></span>일</span>
+                    <span>🗓️ <span th:text="${diary.weekday}"></span></span>
+                </div>
+                <div class="diary-content" th:text="${diary.content}">내용</div>
+                <div>
+                    <a th:href="@{/diaries}" class="btn btn-secondary">📋 목록으로</a>
+                    <a th:href="@{/diaries/update/{id}(id=${diary.diaryId})}" class="btn btn-primary">✏️ 수정</a>
+                    <a th:href="@{/diaries/delete/{id}(id=${diary.diaryId})}" class="btn btn-danger">🗑️ 삭제</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
