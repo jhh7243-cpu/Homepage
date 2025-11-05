@@ -17,7 +17,7 @@ import site.aiion.api.team.service.TeamService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/teams")
+@RequestMapping("/team")
 public class TeamController {
 
     private final TeamService teamService;

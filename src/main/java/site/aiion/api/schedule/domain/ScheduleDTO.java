@@ -2,19 +2,22 @@ package site.aiion.api.schedule.domain;
 
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ScheduleDTO implements Serializable {
-    private String scheDate;
-    private String stadiumId;
+    private Long id;
+    private String sche_date;
+    private Long stadium_Uk;
     private String gubun;
-    private String hometeamId;
-    private String awayteamId;
-    private Integer homeScore;
-    private Integer awayScore;
+    private String hometeam_Uk;
+    private String awayteam_Uk;
+    private Integer home_score;
+    private Integer away_score;
 }
 

@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.aiion.api.common.domain.Messenger;
 import site.aiion.api.diary.domain.DiaryDTO;
-import site.aiion.api.diary.domain.DiaryEntity;
-import site.aiion.api.diary.domain.DiaryVO;
+import site.aiion.api.diary.domain.Diary;
 import site.aiion.api.diary.repository.DiaryRepository;
 
 @Service
@@ -20,8 +19,8 @@ public class DiaryServiceIpml implements DiaryService{
 
     private final DiaryRepository diaryRepository;
 
-    private DiaryVO entityToVO(DiaryEntity entity) {
-        return DiaryVO.builder()
+    private DiaryDTO entityToDTO(Diary entity) {
+        return DiaryDTO.builder()
                 .diary_Id(entity.getDiary_Id())
                 .year(entity.getYear())
                 .month(entity.getMonth())
@@ -34,13 +33,13 @@ public class DiaryServiceIpml implements DiaryService{
 
     @Override
     public Messenger findById(DiaryDTO diaryDTO) {
-        Optional<DiaryEntity> entity = diaryRepository.findById(diaryDTO.getDiary_Id());
+        Optional<Diary> entity = diaryRepository.findById(diaryDTO.getDiary_Id());
         if (entity.isPresent()) {
-            DiaryVO vo = entityToVO(entity.get());
+            DiaryDTO dto = entityToDTO(entity.get());
             return Messenger.builder()
                     .Code(200)
                     .message("조회 성공")
-                    .data(vo)
+                    .data(dto)
                     .build();
         } else {
             return Messenger.builder()
@@ -52,21 +51,21 @@ public class DiaryServiceIpml implements DiaryService{
 
     @Override
     public Messenger findAll() {
-        List<DiaryEntity> entities = diaryRepository.findAll();
-        List<DiaryVO> voList = entities.stream()
-                .map(this::entityToVO)
+        List<Diary> entities = diaryRepository.findAll();
+        List<DiaryDTO> dtoList = entities.stream()
+                .map(this::entityToDTO)
                 .collect(Collectors.toList());
         return Messenger.builder()
                 .Code(200)
-                .message("전체 조회 성공: " + voList.size() + "개")
-                .data(voList)
+                .message("전체 조회 성공: " + dtoList.size() + "개")
+                .data(dtoList)
                 .build();
     }
 
     @Override
     @Transactional
     public Messenger save(DiaryDTO diaryDTO) {
-        DiaryEntity entity = DiaryEntity.builder()
+        Diary entity = Diary.builder()
                 .year(diaryDTO.getYear())
                 .month(diaryDTO.getMonth())
                 .day(diaryDTO.getDay())
@@ -75,20 +74,20 @@ public class DiaryServiceIpml implements DiaryService{
                 .content(diaryDTO.getContent())
                 .build();
         
-        DiaryEntity saved = diaryRepository.save(entity);
-        DiaryVO vo = entityToVO(saved);
+        Diary saved = diaryRepository.save(entity);
+        DiaryDTO dto = entityToDTO(saved);
         return Messenger.builder()
                 .Code(200)
                 .message("저장 성공: ID " + saved.getDiary_Id())
-                .data(vo)
+                .data(dto)
                 .build();
     }
 
     @Override
     @Transactional
     public Messenger saveAll(List<DiaryDTO> diaryDTOList) {
-        List<DiaryEntity> entities = diaryDTOList.stream()
-                .map(dto -> DiaryEntity.builder()
+        List<Diary> entities = diaryDTOList.stream()
+                .map(dto -> Diary.builder()
                         .year(dto.getYear())
                         .month(dto.getMonth())
                         .day(dto.getDay())
@@ -98,7 +97,7 @@ public class DiaryServiceIpml implements DiaryService{
                         .build())
                 .collect(Collectors.toList());
         
-        List<DiaryEntity> saved = diaryRepository.saveAll(entities);
+        List<Diary> saved = diaryRepository.saveAll(entities);
         return Messenger.builder()
                 .Code(200)
                 .message("일괄 저장 성공: " + saved.size() + "개")
@@ -108,9 +107,9 @@ public class DiaryServiceIpml implements DiaryService{
     @Override
     @Transactional
     public Messenger update(DiaryDTO diaryDTO) {
-        Optional<DiaryEntity> optionalEntity = diaryRepository.findById(diaryDTO.getDiary_Id());
+        Optional<Diary> optionalEntity = diaryRepository.findById(diaryDTO.getDiary_Id());
         if (optionalEntity.isPresent()) {
-            DiaryEntity entity = optionalEntity.get();
+            Diary entity = optionalEntity.get();
             entity.setYear(diaryDTO.getYear());
             entity.setMonth(diaryDTO.getMonth());
             entity.setDay(diaryDTO.getDay());
@@ -118,12 +117,12 @@ public class DiaryServiceIpml implements DiaryService{
             entity.setTitle(diaryDTO.getTitle());
             entity.setContent(diaryDTO.getContent());
             
-            DiaryEntity saved = diaryRepository.save(entity);
-            DiaryVO vo = entityToVO(saved);
+            Diary saved = diaryRepository.save(entity);
+            DiaryDTO dto = entityToDTO(saved);
             return Messenger.builder()
                     .Code(200)
                     .message("수정 성공: ID " + diaryDTO.getDiary_Id())
-                    .data(vo)
+                    .data(dto)
                     .build();
         } else {
             return Messenger.builder()
@@ -136,7 +135,7 @@ public class DiaryServiceIpml implements DiaryService{
     @Override
     @Transactional
     public Messenger delete(DiaryDTO diaryDTO) {
-        Optional<DiaryEntity> optionalEntity = diaryRepository.findById(diaryDTO.getDiary_Id());
+        Optional<Diary> optionalEntity = diaryRepository.findById(diaryDTO.getDiary_Id());
         if (optionalEntity.isPresent()) {
             diaryRepository.deleteById(diaryDTO.getDiary_Id());
             return Messenger.builder()

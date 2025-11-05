@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.aiion.api.common.domain.Messenger;
 import site.aiion.api.player.domain.PlayerDTO;
-import site.aiion.api.player.domain.PlayerEntity;
-import site.aiion.api.player.domain.PlayerVO;
+import site.aiion.api.player.domain.Player;
 import site.aiion.api.player.repository.PlayerRepository;
 
 @Service
@@ -20,33 +19,34 @@ public class PlayerServiceIpml implements PlayerService {
 
     private final PlayerRepository playerRepository;
 
-    private PlayerVO entityToVO(PlayerEntity entity) {
-        return PlayerVO.builder()
-                .playerId(entity.getPlayerId())
-                .playerName(entity.getPlayerName())
-                .ePlayerName(entity.getEPlayerName())
+    private PlayerDTO entityToDTO(Player entity) {
+        return PlayerDTO.builder()
+                .id(entity.getId())
+                .player_Uk(entity.getPlayer_Uk())
+                .player_name(entity.getPlayer_name())
+                .e_player_name(entity.getE_player_name())
                 .nickname(entity.getNickname())
-                .joinYyyy(entity.getJoinYyyy())
+                .join_yyyy(entity.getJoin_yyyy())
                 .position(entity.getPosition())
-                .backNo(entity.getBackNo())
+                .back_no(entity.getBack_no())
                 .nation(entity.getNation())
-                .birthDate(entity.getBirthDate())
+                .birth_date(entity.getBirth_date())
                 .solar(entity.getSolar())
                 .height(entity.getHeight())
                 .weight(entity.getWeight())
-                .teamId(entity.getTeamId())
+                .team_Uk(entity.getTeam_Uk())
                 .build();
     }
 
     @Override
     public Messenger findById(PlayerDTO playerDTO) {
-        Optional<PlayerEntity> entity = playerRepository.findById(playerDTO.getPlayerId());
+        Optional<Player> entity = playerRepository.findById(playerDTO.getId());
         if (entity.isPresent()) {
-            PlayerVO vo = entityToVO(entity.get());
+            PlayerDTO dto = entityToDTO(entity.get());
             return Messenger.builder()
                     .Code(200)
                     .message("조회 성공")
-                    .data(vo)
+                    .data(dto)
                     .build();
         } else {
             return Messenger.builder()
@@ -58,67 +58,67 @@ public class PlayerServiceIpml implements PlayerService {
 
     @Override
     public Messenger findAll() {
-        List<PlayerEntity> entities = playerRepository.findAll();
-        List<PlayerVO> voList = entities.stream()
-                .map(this::entityToVO)
+        List<Player> entities = playerRepository.findAll();
+        List<PlayerDTO> dtoList = entities.stream()
+                .map(this::entityToDTO)
                 .collect(Collectors.toList());
         return Messenger.builder()
                 .Code(200)
-                .message("전체 조회 성공: " + voList.size() + "개")
-                .data(voList)
+                .message("전체 조회 성공: " + dtoList.size() + "개")
+                .data(dtoList)
                 .build();
     }
 
     @Override
     @Transactional
     public Messenger save(PlayerDTO playerDTO) {
-        PlayerEntity entity = PlayerEntity.builder()
-                .playerId(playerDTO.getPlayerId())
-                .playerName(playerDTO.getPlayerName())
-                .ePlayerName(playerDTO.getEPlayerName())
+        Player entity = Player.builder()
+                .player_Uk(playerDTO.getPlayer_Uk())
+                .player_name(playerDTO.getPlayer_name())
+                .e_player_name(playerDTO.getE_player_name())
                 .nickname(playerDTO.getNickname())
-                .joinYyyy(playerDTO.getJoinYyyy())
+                .join_yyyy(playerDTO.getJoin_yyyy())
                 .position(playerDTO.getPosition())
-                .backNo(playerDTO.getBackNo())
+                .back_no(playerDTO.getBack_no())
                 .nation(playerDTO.getNation())
-                .birthDate(playerDTO.getBirthDate())
+                .birth_date(playerDTO.getBirth_date())
                 .solar(playerDTO.getSolar())
                 .height(playerDTO.getHeight())
                 .weight(playerDTO.getWeight())
-                .teamId(playerDTO.getTeamId())
+                .team_Uk(playerDTO.getTeam_Uk())
                 .build();
         
-        PlayerEntity saved = playerRepository.save(entity);
-        PlayerVO vo = entityToVO(saved);
+        Player saved = playerRepository.save(entity);
+        PlayerDTO dto = entityToDTO(saved);
         return Messenger.builder()
                 .Code(200)
-                .message("저장 성공: " + saved.getPlayerId())
-                .data(vo)
+                .message("저장 성공: " + saved.getPlayer_Uk())
+                .data(dto)
                 .build();
     }
 
     @Override
     @Transactional
     public Messenger saveAll(List<PlayerDTO> playerDTOList) {
-        List<PlayerEntity> entities = playerDTOList.stream()
-                .map(dto -> PlayerEntity.builder()
-                        .playerId(dto.getPlayerId())
-                        .playerName(dto.getPlayerName())
-                        .ePlayerName(dto.getEPlayerName())
+        List<Player> entities = playerDTOList.stream()
+                .map(dto -> Player.builder()
+                        .player_Uk(dto.getPlayer_Uk())
+                        .player_name(dto.getPlayer_name())
+                        .e_player_name(dto.getE_player_name())
                         .nickname(dto.getNickname())
-                        .joinYyyy(dto.getJoinYyyy())
+                        .join_yyyy(dto.getJoin_yyyy())
                         .position(dto.getPosition())
-                        .backNo(dto.getBackNo())
+                        .back_no(dto.getBack_no())
                         .nation(dto.getNation())
-                        .birthDate(dto.getBirthDate())
+                        .birth_date(dto.getBirth_date())
                         .solar(dto.getSolar())
                         .height(dto.getHeight())
                         .weight(dto.getWeight())
-                        .teamId(dto.getTeamId())
+                        .team_Uk(dto.getTeam_Uk())
                         .build())
                 .collect(Collectors.toList());
         
-        List<PlayerEntity> saved = playerRepository.saveAll(entities);
+        List<Player> saved = playerRepository.saveAll(entities);
         return Messenger.builder()
                 .Code(200)
                 .message("일괄 저장 성공: " + saved.size() + "개")
@@ -128,28 +128,29 @@ public class PlayerServiceIpml implements PlayerService {
     @Override
     @Transactional
     public Messenger update(PlayerDTO playerDTO) {
-        Optional<PlayerEntity> optionalEntity = playerRepository.findById(playerDTO.getPlayerId());
+        Optional<Player> optionalEntity = playerRepository.findById(playerDTO.getId());
         if (optionalEntity.isPresent()) {
-            PlayerEntity entity = optionalEntity.get();
-            entity.setPlayerName(playerDTO.getPlayerName());
-            entity.setEPlayerName(playerDTO.getEPlayerName());
+            Player entity = optionalEntity.get();
+            entity.setPlayer_Uk(playerDTO.getPlayer_Uk());
+            entity.setPlayer_name(playerDTO.getPlayer_name());
+            entity.setE_player_name(playerDTO.getE_player_name());
             entity.setNickname(playerDTO.getNickname());
-            entity.setJoinYyyy(playerDTO.getJoinYyyy());
+            entity.setJoin_yyyy(playerDTO.getJoin_yyyy());
             entity.setPosition(playerDTO.getPosition());
-            entity.setBackNo(playerDTO.getBackNo());
+            entity.setBack_no(playerDTO.getBack_no());
             entity.setNation(playerDTO.getNation());
-            entity.setBirthDate(playerDTO.getBirthDate());
+            entity.setBirth_date(playerDTO.getBirth_date());
             entity.setSolar(playerDTO.getSolar());
             entity.setHeight(playerDTO.getHeight());
             entity.setWeight(playerDTO.getWeight());
-            entity.setTeamId(playerDTO.getTeamId());
+            entity.setTeam_Uk(playerDTO.getTeam_Uk());
             
-            PlayerEntity saved = playerRepository.save(entity);
-            PlayerVO vo = entityToVO(saved);
+            Player saved = playerRepository.save(entity);
+            PlayerDTO dto = entityToDTO(saved);
             return Messenger.builder()
                     .Code(200)
-                    .message("수정 성공: " + playerDTO.getPlayerId())
-                    .data(vo)
+                    .message("수정 성공: " + playerDTO.getPlayer_Uk())
+                    .data(dto)
                     .build();
         } else {
             return Messenger.builder()
@@ -162,12 +163,12 @@ public class PlayerServiceIpml implements PlayerService {
     @Override
     @Transactional
     public Messenger delete(PlayerDTO playerDTO) {
-        Optional<PlayerEntity> optionalEntity = playerRepository.findById(playerDTO.getPlayerId());
+        Optional<Player> optionalEntity = playerRepository.findById(playerDTO.getId());
         if (optionalEntity.isPresent()) {
-            playerRepository.deleteById(playerDTO.getPlayerId());
+            playerRepository.deleteById(playerDTO.getId());
             return Messenger.builder()
                     .Code(200)
-                    .message("삭제 성공: " + playerDTO.getPlayerId())
+                    .message("삭제 성공: " + playerDTO.getPlayer_Uk())
                     .build();
         } else {
             return Messenger.builder()

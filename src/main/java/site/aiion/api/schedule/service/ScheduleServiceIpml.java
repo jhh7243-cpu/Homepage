@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.aiion.api.common.domain.Messenger;
 import site.aiion.api.schedule.domain.ScheduleDTO;
-import site.aiion.api.schedule.domain.ScheduleEntity;
-import site.aiion.api.schedule.domain.ScheduleVO;
+import site.aiion.api.schedule.domain.Schedule;
 import site.aiion.api.schedule.repository.ScheduleRepository;
 
 @Service
@@ -20,28 +19,29 @@ public class ScheduleServiceIpml implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-    private ScheduleVO entityToVO(ScheduleEntity entity) {
-        return ScheduleVO.builder()
-                .scheDate(entity.getScheDate())
-                .stadiumId(entity.getStadiumId())
+    private ScheduleDTO entityToDTO(Schedule entity) {
+        ScheduleDTO dto = ScheduleDTO.builder()
+                .id(entity.getId())
+                .sche_date(entity.getSche_date())
+                .stadium_Uk(entity.getStadium_Uk())
                 .gubun(entity.getGubun())
-                .hometeamId(entity.getHometeamId())
-                .awayteamId(entity.getAwayteamId())
-                .homeScore(entity.getHomeScore())
-                .awayScore(entity.getAwayScore())
+                .hometeam_Uk(entity.getHometeam_Uk())
+                .awayteam_Uk(entity.getAwayteam_Uk())
+                .home_score(entity.getHome_score())
+                .away_score(entity.getAway_score())
                 .build();
+        return dto;
     }
 
     @Override
     public Messenger findById(ScheduleDTO scheduleDTO) {
-        ScheduleDTO id = new ScheduleDTO(scheduleDTO.getScheDate(), scheduleDTO.getStadiumId(), null, null, null, null, null);
-        Optional<ScheduleEntity> entity = scheduleRepository.findById(id);
+        Optional<Schedule> entity = scheduleRepository.findById(scheduleDTO.getId());
         if (entity.isPresent()) {
-            ScheduleVO vo = entityToVO(entity.get());
+            ScheduleDTO dto = entityToDTO(entity.get());
             return Messenger.builder()
                     .Code(200)
                     .message("조회 성공")
-                    .data(vo)
+                    .data(dto)
                     .build();
         } else {
             return Messenger.builder()
@@ -53,84 +53,83 @@ public class ScheduleServiceIpml implements ScheduleService {
 
     @Override
     public Messenger findAll() {
-        List<ScheduleEntity> entities = scheduleRepository.findAll();
-        List<ScheduleVO> voList = entities.stream()
-                .map(this::entityToVO)
+        List<Schedule> entities = scheduleRepository.findAll();
+        List<ScheduleDTO> dtoList = entities.stream()
+                .map(this::entityToDTO)
                 .collect(Collectors.toList());
         return Messenger.builder()
                 .Code(200)
-                .message("전체 조회 성공: " + voList.size() + "개")
-                .data(voList)
+                .message("전체 조회 성공: " + dtoList.size() + "개")
+                .data(dtoList)
                 .build();
     }
 
     @Override
     @Transactional
     public Messenger save(ScheduleDTO scheduleDTO) {
-        ScheduleEntity entity = ScheduleEntity.builder()
-                .scheDate(scheduleDTO.getScheDate())
-                .stadiumId(scheduleDTO.getStadiumId())
+        Schedule entity = Schedule.builder()
+                .sche_date(scheduleDTO.getSche_date())
+                .stadium_Uk(scheduleDTO.getStadium_Uk())
                 .gubun(scheduleDTO.getGubun())
-                .hometeamId(scheduleDTO.getHometeamId())
-                .awayteamId(scheduleDTO.getAwayteamId())
-                .homeScore(scheduleDTO.getHomeScore())
-                .awayScore(scheduleDTO.getAwayScore())
+                .hometeam_Uk(scheduleDTO.getHometeam_Uk())
+                .awayteam_Uk(scheduleDTO.getAwayteam_Uk())
+                .home_score(scheduleDTO.getHome_score())
+                .away_score(scheduleDTO.getAway_score())
                 .build();
         
-        ScheduleEntity saved = scheduleRepository.save(entity);
-        ScheduleVO vo = entityToVO(saved);
+        Schedule saved = scheduleRepository.save(entity);
+        ScheduleDTO dto = entityToDTO(saved);
         return Messenger.builder()
                 .Code(200)
-                .message("저장 성공: " + saved.getScheDate() + " " + saved.getStadiumId())
-                .data(vo)
+                .message("저장 성공: " + saved.getId())
+                .data(dto)
                 .build();
     }
 
     @Override
     @Transactional
     public Messenger saveAll(List<ScheduleDTO> scheduleDTOList) {
-        List<ScheduleEntity> entities = scheduleDTOList.stream()
-                .map(dto -> ScheduleEntity.builder()
-                        .scheDate(dto.getScheDate())
-                        .stadiumId(dto.getStadiumId())
+        List<Schedule> entities = scheduleDTOList.stream()
+                .map(dto -> Schedule.builder()
+                        .sche_date(dto.getSche_date())
+                        .stadium_Uk(dto.getStadium_Uk())
                         .gubun(dto.getGubun())
-                        .hometeamId(dto.getHometeamId())
-                        .awayteamId(dto.getAwayteamId())
-                        .homeScore(dto.getHomeScore())
-                        .awayScore(dto.getAwayScore())
+                        .hometeam_Uk(dto.getHometeam_Uk())
+                        .awayteam_Uk(dto.getAwayteam_Uk())
+                        .home_score(dto.getHome_score())
+                        .away_score(dto.getAway_score())
                         .build())
                 .collect(Collectors.toList());
         
-        List<ScheduleEntity> saved = scheduleRepository.saveAll(entities);
-        List<ScheduleVO> voList = saved.stream()
-                .map(this::entityToVO)
+        List<Schedule> saved = scheduleRepository.saveAll(entities);
+        List<ScheduleDTO> dtoList = saved.stream()
+                .map(this::entityToDTO)
                 .collect(Collectors.toList());
         return Messenger.builder()
                 .Code(200)
-                .message("일괄 저장 성공: " + voList.size() + "개")
-                .data(voList)
+                .message("일괄 저장 성공: " + dtoList.size() + "개")
+                .data(dtoList)
                 .build();
     }
 
     @Override
     @Transactional
     public Messenger update(ScheduleDTO scheduleDTO) {
-        ScheduleDTO id = new ScheduleDTO(scheduleDTO.getScheDate(), scheduleDTO.getStadiumId(), null, null, null, null, null);
-        Optional<ScheduleEntity> optionalEntity = scheduleRepository.findById(id);
+        Optional<Schedule> optionalEntity = scheduleRepository.findById(scheduleDTO.getId());
         if (optionalEntity.isPresent()) {
-            ScheduleEntity entity = optionalEntity.get();
+            Schedule entity = optionalEntity.get();
             entity.setGubun(scheduleDTO.getGubun());
-            entity.setHometeamId(scheduleDTO.getHometeamId());
-            entity.setAwayteamId(scheduleDTO.getAwayteamId());
-            entity.setHomeScore(scheduleDTO.getHomeScore());
-            entity.setAwayScore(scheduleDTO.getAwayScore());
+            entity.setHometeam_Uk(scheduleDTO.getHometeam_Uk());
+            entity.setAwayteam_Uk(scheduleDTO.getAwayteam_Uk());
+            entity.setHome_score(scheduleDTO.getHome_score());
+            entity.setAway_score(scheduleDTO.getAway_score());
             
-            ScheduleEntity saved = scheduleRepository.save(entity);
-            ScheduleVO vo = entityToVO(saved);
+            Schedule saved = scheduleRepository.save(entity);
+            ScheduleDTO dto = entityToDTO(saved);
             return Messenger.builder()
                     .Code(200)
-                    .message("수정 성공: " + scheduleDTO.getScheDate() + " " + scheduleDTO.getStadiumId())
-                    .data(vo)
+                    .message("수정 성공: " + scheduleDTO.getId())
+                    .data(dto)
                     .build();
         } else {
             return Messenger.builder()
@@ -143,13 +142,12 @@ public class ScheduleServiceIpml implements ScheduleService {
     @Override
     @Transactional
     public Messenger delete(ScheduleDTO scheduleDTO) {
-        ScheduleDTO id = new ScheduleDTO(scheduleDTO.getScheDate(), scheduleDTO.getStadiumId(), null, null, null, null, null);
-        Optional<ScheduleEntity> optionalEntity = scheduleRepository.findById(id);
+        Optional<Schedule> optionalEntity = scheduleRepository.findById(scheduleDTO.getId());
         if (optionalEntity.isPresent()) {
-            scheduleRepository.deleteById(id);
+            scheduleRepository.deleteById(scheduleDTO.getId());
             return Messenger.builder()
                     .Code(200)
-                    .message("삭제 성공: " + scheduleDTO.getScheDate() + " " + scheduleDTO.getStadiumId())
+                    .message("삭제 성공: " + scheduleDTO.getId())
                     .build();
         } else {
             return Messenger.builder()
