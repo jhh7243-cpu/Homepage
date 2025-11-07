@@ -1,4 +1,4 @@
-package site.aiion.api.diary.service;
+package site.aiion.api.calendar.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,19 +8,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import site.aiion.api.diary.domain.Diary;
-import site.aiion.api.diary.domain.DiaryDTO;
-import site.aiion.api.diary.repository.DiaryRepository;
+import site.aiion.api.calendar.domain.Calender;
+import site.aiion.api.calendar.domain.CalenderDTO;
+import site.aiion.api.calendar.repository.CalenderRepository;
 import site.aiion.api.common.domain.Messenger;
 
 @Service
 @RequiredArgsConstructor
-public class DiaryServiceIpml implements DiaryService{
+public class CalenderServiceIpml implements CalenderService {
 
-    private final DiaryRepository diaryRepository;
+    private final CalenderRepository calenderRepository;
 
-    private DiaryDTO entityToDTO(Diary entity) {
-        return DiaryDTO.builder()
+    private CalenderDTO entityToDTO(Calender entity) {
+        return CalenderDTO.builder()
                 .id(entity.getId())
                 .year(entity.getYear())
                 .month(entity.getMonth())
@@ -32,10 +32,10 @@ public class DiaryServiceIpml implements DiaryService{
     }
 
     @Override
-    public Messenger findById(DiaryDTO diaryDTO) {
-        Optional<Diary> entity = diaryRepository.findById(diaryDTO.getId());
+    public Messenger findById(CalenderDTO calenderDTO) {
+        Optional<Calender> entity = calenderRepository.findById(calenderDTO.getId());
         if (entity.isPresent()) {
-            DiaryDTO dto = entityToDTO(entity.get());
+            CalenderDTO dto = entityToDTO(entity.get());
             return Messenger.builder()
                     .Code(200)
                     .message("조회 성공")
@@ -44,15 +44,15 @@ public class DiaryServiceIpml implements DiaryService{
         } else {
             return Messenger.builder()
                     .Code(404)
-                    .message("일기를 찾을 수 없습니다.")
+                    .message("캘린더를 찾을 수 없습니다.")
                     .build();
         }
     }
 
     @Override
     public Messenger findAll() {
-        List<Diary> entities = diaryRepository.findAll();
-        List<DiaryDTO> dtoList = entities.stream()
+        List<Calender> entities = calenderRepository.findAll();
+        List<CalenderDTO> dtoList = entities.stream()
                 .map(this::entityToDTO)
                 .collect(Collectors.toList());
         return Messenger.builder()
@@ -64,18 +64,18 @@ public class DiaryServiceIpml implements DiaryService{
 
     @Override
     @Transactional
-    public Messenger save(DiaryDTO diaryDTO) {
-        Diary entity = Diary.builder()
-                .year(diaryDTO.getYear())
-                .month(diaryDTO.getMonth())
-                .day(diaryDTO.getDay())
-                .weekday(diaryDTO.getWeekday())
-                .title(diaryDTO.getTitle())
-                .content(diaryDTO.getContent())
+    public Messenger save(CalenderDTO calenderDTO) {
+        Calender entity = Calender.builder()
+                .year(calenderDTO.getYear())
+                .month(calenderDTO.getMonth())
+                .day(calenderDTO.getDay())
+                .weekday(calenderDTO.getWeekday())
+                .title(calenderDTO.getTitle())
+                .content(calenderDTO.getContent())
                 .build();
         
-        Diary saved = diaryRepository.save(entity);
-        DiaryDTO dto = entityToDTO(saved);
+        Calender saved = calenderRepository.save(entity);
+        CalenderDTO dto = entityToDTO(saved);
         return Messenger.builder()
                 .Code(200)
                 .message("저장 성공: ID " + saved.getId())
@@ -85,9 +85,9 @@ public class DiaryServiceIpml implements DiaryService{
 
     @Override
     @Transactional
-    public Messenger saveAll(List<DiaryDTO> diaryDTOList) {
-        List<Diary> entities = diaryDTOList.stream()
-                .map(dto -> Diary.builder()
+    public Messenger saveAll(List<CalenderDTO> calenderDTOList) {
+        List<Calender> entities = calenderDTOList.stream()
+                .map(dto -> Calender.builder()
                         .year(dto.getYear())
                         .month(dto.getMonth())
                         .day(dto.getDay())
@@ -97,7 +97,7 @@ public class DiaryServiceIpml implements DiaryService{
                         .build())
                 .collect(Collectors.toList());
         
-        List<Diary> saved = diaryRepository.saveAll(entities);
+        List<Calender> saved = calenderRepository.saveAll(entities);
         return Messenger.builder()
                 .Code(200)
                 .message("일괄 저장 성공: " + saved.size() + "개")
@@ -106,52 +106,48 @@ public class DiaryServiceIpml implements DiaryService{
 
     @Override
     @Transactional
-    public Messenger update(DiaryDTO diaryDTO) {
-        Optional<Diary> optionalEntity = diaryRepository.findById(diaryDTO.getId());
+    public Messenger update(CalenderDTO calenderDTO) {
+        Optional<Calender> optionalEntity = calenderRepository.findById(calenderDTO.getId());
         if (optionalEntity.isPresent()) {
-            Diary entity = optionalEntity.get();
-            entity.setYear(diaryDTO.getYear());
-            entity.setMonth(diaryDTO.getMonth());
-            entity.setDay(diaryDTO.getDay());
-            entity.setWeekday(diaryDTO.getWeekday());
-            entity.setTitle(diaryDTO.getTitle());
-            entity.setContent(diaryDTO.getContent());
+            Calender entity = optionalEntity.get();
+            entity.setYear(calenderDTO.getYear());
+            entity.setMonth(calenderDTO.getMonth());
+            entity.setDay(calenderDTO.getDay());
+            entity.setWeekday(calenderDTO.getWeekday());
+            entity.setTitle(calenderDTO.getTitle());
+            entity.setContent(calenderDTO.getContent());
             
-            Diary saved = diaryRepository.save(entity);
-            DiaryDTO dto = entityToDTO(saved);
+            Calender saved = calenderRepository.save(entity);
+            CalenderDTO dto = entityToDTO(saved);
             return Messenger.builder()
                     .Code(200)
-                    .message("수정 성공: ID " + diaryDTO.getId())
+                    .message("수정 성공: ID " + calenderDTO.getId())
                     .data(dto)
                     .build();
         } else {
             return Messenger.builder()
                     .Code(404)
-                    .message("수정할 일기를 찾을 수 없습니다.")
+                    .message("수정할 캘린더를 찾을 수 없습니다.")
                     .build();
         }
     }
 
     @Override
     @Transactional
-    public Messenger delete(DiaryDTO diaryDTO) {
-        Optional<Diary> optionalEntity = diaryRepository.findById(diaryDTO.getId());
+    public Messenger delete(CalenderDTO calenderDTO) {
+        Optional<Calender> optionalEntity = calenderRepository.findById(calenderDTO.getId());
         if (optionalEntity.isPresent()) {
-            diaryRepository.deleteById(diaryDTO.getId());
+            calenderRepository.deleteById(calenderDTO.getId());
             return Messenger.builder()
                     .Code(200)
-                    .message("삭제 성공: ID " + diaryDTO.getId())
+                    .message("삭제 성공: ID " + calenderDTO.getId())
                     .build();
         } else {
             return Messenger.builder()
                     .Code(404)
-                    .message("삭제할 일기를 찾을 수 없습니다.")
+                    .message("삭제할 캘린더를 찾을 수 없습니다.")
                     .build();
         }
     }
-
-
-    
-
-
 }
+
