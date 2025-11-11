@@ -1,0 +1,150 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: aidb
+      POSTGRES_USER: aiion
+      POSTGRES_PASSWORD: aiion4man
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiion"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Configuration Server
+  config-server:
+    build:
+      context: ./configuration
+      dockerfile: Dockerfile
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - microservices-network
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  # Eureka Server
+  eureka-server:
+    build:
+      context: ./eureka
+      dockerfile: Dockerfile
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - microservices-network
+    depends_on:
+      - config-server
+    restart: unless-stopped
+
+  # API Gateway
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gateway-server
+    ports:
+      - "8080:8080"
+    networks:
+      - microservices-network
+    depends_on:
+      - eureka-server
+      - postgres
+    restart: unless-stopped
+
+  # Common Service
+  common-service:
+    build:
+      context: ./services/common-service
+      dockerfile: Dockerfile
+    container_name: common-service
+    ports:
+      - "8081:8080"
+    networks:
+      - microservices-network
+    depends_on:
+      - eureka-server
+      - postgres
+    restart: unless-stopped
+
+  # User Service
+  user-service:
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8082:8080"
+    networks:
+      - microservices-network
+    depends_on:
+      - eureka-server
+      - postgres
+    restart: unless-stopped
+
+  # Calendar Service
+  calendar-service:
+    build:
+      context: ./services/calendar-service
+      dockerfile: Dockerfile
+    container_name: calendar-service
+    ports:
+      - "8083:8080"
+    networks:
+      - microservices-network
+    depends_on:
+      - eureka-server
+      - postgres
+    restart: unless-stopped
+
+  # Diary Service
+  diary-service:
+    build:
+      context: ./services/diary-service
+      dockerfile: Dockerfile
+    container_name: diary-service
+    ports:
+      - "8084:8080"
+    networks:
+      - microservices-network
+    depends_on:
+      - eureka-server
+      - postgres
+    restart: unless-stopped
+
+  # Soccer Service
+  soccer-service:
+    build:
+      context: ./services/soccer-service
+      dockerfile: Dockerfile
+    container_name: soccer-service
+    ports:
+      - "8085:8080"
+    networks:
+      - microservices-network
+    depends_on:
+      - eureka-server
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  microservices-network:
+    driver: bridge
+

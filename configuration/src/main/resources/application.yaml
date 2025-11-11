@@ -1,0 +1,31 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        encrypt:
+          enabled: false
+        git:
+          uri: git@github.com:jhh7243-cpu/I-want-win.git
+          default-label: main
+          ignoreLocalSshSettings: true
+          strictHostKeyChecking: true
+          hostKey: AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+          hostKeyAlgorithm: ssh-ed25519
+          privateKey: ${GIT_PRIVATE_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show_details: always
+encrypt:
+  key: my-secret
